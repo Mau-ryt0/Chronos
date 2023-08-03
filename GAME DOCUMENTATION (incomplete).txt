@@ -1,0 +1,35 @@
+GAME DOCUMENTATION
+
+main.c
+
+void perfomantdelay(UINT8 delay)
+Is a function to wait a certain amount of frames.
+
+void input()
+get the inputs of the controllers.
+
+void main()
+This is the main function.
+
+<-------------------------------------------------------->
+
+setup.c
+
+setup()
+This function setups the game.
+
+mainloop()
+Set the main loop of the game.
+
+<-------------------------------------------------------->
+
+camera.c
+
+inline void set_attributed_bkg_tiles(UBYTE x, UBYTE y, UBYTE w, UBYTE h, const UBYTE * map, const UBYTE * attr, const UBYTE MapWidth, uint8_t base)
+Set tiles with the attribute map.
+
+static void updateMap(uint8_t dir, const unsigned char * MapPlane0, const unsigned char * MapPlane1, uint8_t base)
+Change the map tiles.
+
+void camera(const unsigned char * MapPlane0, const unsigned char * MapPlane1, uint8_t base)
+This do the room changing routine.
