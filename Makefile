@@ -1,8 +1,8 @@
-all: before assets build
+all: before assets build clean
 
-sameboy: before assets build clean exec
+sb: before assets build clean sbx
 
-bgb: assets build clean bgbex
+bgb: before assets build clean bgbx
 
 before:
 	rm -rf *.o *.gbc & clear
@@ -15,10 +15,10 @@ assets:
 build:
 	lcc -Wm-yn"Chronos" -Wm-yc -Wm-ys -o main.gbc ./src/main.c ./src/lizzie.c ./src/camera.c ./src/setup.c ./src/Maps/TestMap.c ./src/Tiles/Tiles.c ./src/Sprites/lizzie_spr.c
 
-exec:
-	/snap/sameboy/1770/usr/bin/sameboy main.gbc
+sbx:
+	/snap/sameboy/1770/usr/bin/sameboy main.gbc 
 
-bgbex:
+bgbx:
 	wine /usr/local/BGB/bgb.exe main.gbc
 
 clean:

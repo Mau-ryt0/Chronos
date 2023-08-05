@@ -45,7 +45,7 @@ void walking(uint8_t dir)
 	
 	else if (dir == DIR_RIGHT || dir == DIR_LEFT)
 	{
-		if (timer > 7)
+		if (timer > 8)
 		{
 			if (frame < 3) frame++;
 			else frame = 0;
