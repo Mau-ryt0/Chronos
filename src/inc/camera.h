@@ -3,7 +3,7 @@
 #define _CAMERA_H_
 
 // extern static void updateMap(uint8_t dir, const unsigned char * MapPlane0, const unsigned char * MapPlane1, uint8_t base);
-extern void camera(uint8_t *dir, const unsigned char *map, const unsigned char *attr, const uint16_t MapWidth, const uint16_t MapHeight, uint8_t base);
+extern void camera(const unsigned char *map, const unsigned char *attr, const uint8_t MapWidth, const uint8_t MapHeight, uint8_t base);
 
 inline void set_attributed_bkg_submap(UBYTE x, UBYTE y, UBYTE w, UBYTE h, const unsigned char *map, const unsigned char *attr, const uint8_t MapWidth, uint8_t base)
 {

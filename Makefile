@@ -13,7 +13,7 @@ assets:
 	clear
 
 build:
-	lcc -Wm-yn"Chronos" -Wm-yc -Wm-ys -o main.gbc ./src/main.c ./src/lizzie.c ./src/camera.c ./src/setup.c ./src/Maps/TestMap.c ./src/Tiles/Tiles.c ./src/Sprites/lizzie_spr.c
+	lcc -Wm-yn"Chronos" -Wm-yc -Wm-ys -o main.gbc ./src/main.c ./src/lizzie.c ./src/camera.c ./src/gfx.c ./src/setup.c ./src/Maps/TestMap.c ./src/Tiles/Tiles.c ./src/Sprites/lizzie_spr.c
 
 sbx:
 	/snap/sameboy/1770/usr/bin/sameboy main.gbc 
@@ -22,4 +22,4 @@ bgbx:
 	wine /usr/local/BGB/bgb.exe main.gbc
 
 clean:
-	rm compile_files.txt -rf *.o & clear
+	rm compile_files.txt -rf *.o

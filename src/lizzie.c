@@ -132,8 +132,7 @@ void setupPlayer()
 	lizzie.dir = DIR_RIGHT;
 
 	set_sprite_data(0, 4, &lizzie_spr_tiles[0]);
-	set_sprite_tile(0, 0);
-	set_sprite_tile(1, 2);
+	set_sprite_tile(0, 0); set_sprite_tile(1, 2);
 	for (uint8_t i=8; i<40; i++) set_sprite_tile(i, 0x7F);
 	set_sprite_palette(0, 1, &PlayerPalette[0]);
 	mv_spr(lizzie.x, lizzie.y, lizzie.dir);
