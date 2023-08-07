@@ -2,6 +2,8 @@
 #ifndef _CAMERA_H_
 #define _CAMERA_H_
 
+extern uint16_t camerax, cameray;
+
 // extern static void updateMap(uint8_t dir, const unsigned char * MapPlane0, const unsigned char * MapPlane1, uint8_t base);
 extern void camera(const unsigned char *map, const unsigned char *attr, const uint8_t MapWidth, const uint8_t MapHeight, uint8_t base);
 

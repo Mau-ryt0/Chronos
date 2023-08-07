@@ -23,28 +23,28 @@ void inputs(uint8_t *x, uint8_t *y, uint8_t *dir)
     if (jpads.joy0 & J_RIGHT && !(jpads.joy0 &J_LEFT))
     {
         if (*dir == DIR_NULL) *dir = DIR_RIGHT;
-        *x+=1;
+        if (canMove(*x, *y) == false) *x+=1;
     }
     else if (!(jpads.joy0 & J_RIGHT) && *dir == DIR_RIGHT) *dir = DIR_NULL;
 
     if (jpads.joy0 & J_LEFT && !(jpads.joy0 & J_RIGHT))
     {
         if (*dir == DIR_NULL) *dir = DIR_LEFT;
-        *x-=1;
+        if (canMove(*x, *y) == false) *x-=1;
     }
     else if (!(jpads.joy0 & J_LEFT) && *dir == DIR_LEFT) *dir = DIR_NULL;
 
     if (jpads.joy0 & J_DOWN && !(jpads.joy0 & J_UP))
     {
         if (*dir == DIR_NULL) *dir = DIR_DOWN;
-        *y+=1;
+        if (canMove(*x, *y) == true) *y+=1;
     }
     else if (!(jpads.joy0 & J_DOWN) && *dir == DIR_DOWN) *dir = DIR_NULL;
 
     if (jpads.joy0 & J_UP && !(jpads.joy0 & J_DOWN))
     {
         if (*dir == DIR_NULL) *dir = DIR_UP;
-        *y-=1;
+        if (canMove(*x, *y) == true) *y-=1;
     }
     else if (!(jpads.joy0 & J_UP) && *dir == DIR_UP) *dir = DIR_NULL;
 

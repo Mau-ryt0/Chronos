@@ -22,36 +22,6 @@
 
 uint16_t camerax, cameray;
 
-// The method to get the camera is that you load specific tiles.
-// For that you should get the tile position in the tilemap, by dividing the Game Boy's background position into 8.
-// It will give you a position in tiles, something that Game Boy can understand.
-// This method should use set_bkg_based_submap(), because the first two parameters are used for both tile map position and Game Boy's Background position.
-//static void updateMap(uint8_t dir, const unsigned char * MapPlane0, const unsigned char * MapPlane1, const uint8_t MapWidth, uint8_t base)
-//{
-//	MapPlane1;
-//	switch(dir)
-//	{
-//		case DIR_RIGHT:
-//			// Gets and puts the tiles of the tilemap in the up direction.
-//			
-//			break;
-//		case DIR_LEFT:
-//			// Gets and puts the tiles of the tilemap in the up direction.
-//			
-//			break;
-//        case DIR_DOWN:
-//        	// Gets and puts the tiles of the tilemap in the down direction.
-//        	
-//			break;
-//        case DIR_UP:
-//        	// Gets and puts the tiles of the tilemap in the up direction.
-//        	// Note that isn't necesary to put "+ DEVICE_SCREEN_HEIGHT" because the tilemap is updating in the top of screen.
-//			
-//			break;
-//		default: break;
-//	}
-//}
-
 void scroll_sprites(uint8_t sprites, uint8_t direction, uint8_t vel)
 {
 	for (uint8_t i = 0; i < sprites; i++)
@@ -63,6 +33,10 @@ void scroll_sprites(uint8_t sprites, uint8_t direction, uint8_t vel)
 	}
 }
 
+// The method to get the camera is that you load specific tiles.
+// For that you should get the tile position in the tilemap, by dividing the Game Boy's background position by 8.
+// It will give you a position in tiles, something that the Game Boy can understand.
+// This method should use set_bkg_based_submap(), because the first two parameters are used for both tile map position and Game Boy's Background position.
 void camera(const unsigned char *map, const unsigned char *attr, const uint8_t MapWidth, const uint8_t MapHeight, uint8_t base)
 {
 	// Right scroll.
@@ -110,6 +84,7 @@ void camera(const unsigned char *map, const unsigned char *attr, const uint8_t M
 		for (uint8_t i = 0; i < 144/SC_VEL; i++)
 		{
 			cameray -= SC_VEL;
+			// Note that isn't necesary to put "+ DEVICE_SCREEN_HEIGHT" because the tilemap is updating in the top of screen.
 			if (cameray % 8 == 0) set_attributed_bkg_submap(camerax/8, cameray/8, 20, 1, map, attr, MapWidth, base);
 			wait_vbl_done();
 			SCY_REG = cameray;

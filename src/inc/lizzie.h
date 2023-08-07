@@ -29,6 +29,7 @@ struct character
 
 extern struct character lizzie;
 
+extern bool canMove(uint16_t PosX, uint16_t PosY);
 extern void setupPlayer();
 extern void mv_spr(uint8_t x, uint8_t y, uint8_t dir);
 

@@ -7,9 +7,11 @@
 #include <gb/cgb.h>
 
 #include "Sprites/lizzie_spr.h"
+#include "Maps/TestMap.h"
 
 #include "inc/lizzie.h"
 #include "inc/main.h"
+#include "inc/camera.h"
 
 // Defined in lizzie.h
 // #define DIR_RIGHT 1
@@ -38,6 +40,15 @@ uint16_t timer, frame;
 
     return false;
 }*/
+
+bool canMove(uint16_t PosX, uint16_t PosY)
+{
+	// Divide the player's position by 8 to translate it to a tile position.
+    uint16_t MapIndex = TestMap_WIDTH * ((camerax<<3)+(PosX-1)/8) + ((cameray<<3)+(PosY-1)/8);
+    
+    if (TestMap_map[MapIndex] == 0x0A || TestMap_map[MapIndex] == 0x2E) return false;
+    return true;
+}
 
 void walking(uint8_t dir)
 {
