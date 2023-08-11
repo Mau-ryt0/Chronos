@@ -16,7 +16,7 @@ joypads_t jpads;
 UWORD BGPalette[4] = {RGB(29, 25, 21), RGB(17, 15, 11), RGB(13, 11, 7), RGB(3, 3, 3)};
 UWORD BGPaletteDark[4] = {RGB8(73, 60, 41), RGB8(73, 60, 41), RGB8(57, 44, 26), RGB8(12, 12, 12)};
 
-void setup()
+void setup(void)
 {
     joypad_init(1, &jpads);
 
@@ -35,9 +35,9 @@ void setup()
     fadein(&BGPaletteDark[0], &BGPalette[0], 2);
 }
 
-void mainloop()
+void mainloop(void)
 {
-    while(1)
+    while(true)
     {
         inputs(&lizzie.x, &lizzie.y, &lizzie.dir);
         if (lizzie.x > 168 || lizzie.x < 8 || lizzie.y > 152 || lizzie.y < 8)

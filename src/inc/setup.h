@@ -5,7 +5,7 @@
 
 extern joypads_t jpads;
 
-extern void setup();
-extern void mainloop();
+extern void setup(void);
+extern void mainloop(void);
 
 #endif

@@ -10,6 +10,7 @@
 #include "Maps/TestMap.h"
 
 #include "inc/lizzie.h"
+#include "inc/setup.h"
 #include "inc/main.h"
 #include "inc/camera.h"
 
@@ -31,22 +32,18 @@ uint8_t dir, old_dir;
 uint16_t timer, frame;
 // bool done, done1;
 
-/* bool canMove(uint16_t x, uint16_t y)
-{
-    uint16_t MapIndex = (x >> 3) + ((y >> 3) * 20) - 40;
-    uint16_t Tile = Map[MapIndex];
-    
-    if (Tile == EmptyTile[0]) return true;
-
-    return false;
-}*/
-
-bool canMove(uint16_t PosX, uint16_t PosY)
+bool colliding(uint16_t x, uint16_t y)
 {
 	// Divide the player's position by 8 to translate it to a tile position.
-    uint16_t MapIndex = TestMap_WIDTH * ((camerax<<3)+(PosX-1)/8) + ((cameray<<3)+(PosY-1)/8);
+	uint8_t xa = (camerax<<3)+(x+64)/8;
+	uint8_t ya = (cameray<<3)+(y+32)/8;
+    uint16_t MapIndex = TestMap_WIDTH * xa + ya;
     
-    if (TestMap_map[MapIndex] == 0x0A || TestMap_map[MapIndex] == 0x2E) return false;
+    if
+    (
+    	// TestMap_map[MapIndex] == 0x0A||
+    	TestMap_map[MapIndex] == 0x00
+    ) return false;
     return true;
 }
 
@@ -76,63 +73,78 @@ void walking(uint8_t dir)
 	switch (frame)
 	{
 		case 0:
-				if (dir == DIR_RIGHT || dir == DIR_LEFT) set_sprite_data(0, 4, &lizzie_spr_tiles[0]);
-				else if (dir == DIR_DOWN) set_sprite_data(0, 4, &lizzie_spr_tiles[6*32]);
-				else if (dir == DIR_UP) set_sprite_data(0, 4, &lizzie_spr_tiles[12*32]);
+				if (dir == DIR_RIGHT) set_sprite_data(0, 4, &lizzie_spr_tiles[0]);
+				else if (dir == DIR_LEFT) set_sprite_data(0, 4, &lizzie_spr_tiles[6*32]);
+				else if (dir == DIR_DOWN) set_sprite_data(0, 4, &lizzie_spr_tiles[12*32]);
+				else if (dir == DIR_UP) set_sprite_data(0, 4, &lizzie_spr_tiles[18*32]);
 			break;
 		case 1:
-				if (dir == DIR_RIGHT || dir == DIR_LEFT) set_sprite_data(0, 4, &lizzie_spr_tiles[2*32]);
-				else if (dir == DIR_DOWN) set_sprite_data(0, 4, &lizzie_spr_tiles[8*32]);
-				else if (dir == DIR_UP) set_sprite_data(0, 4, &lizzie_spr_tiles[14*32]);
+				if (dir == DIR_RIGHT) set_sprite_data(0, 4, &lizzie_spr_tiles[2*32]);
+				else if (dir == DIR_LEFT) set_sprite_data(0, 4, &lizzie_spr_tiles[8*32]);
+				else if (dir == DIR_DOWN) set_sprite_data(0, 4, &lizzie_spr_tiles[14*32]);
+				else if (dir == DIR_UP) set_sprite_data(0, 4, &lizzie_spr_tiles[20*32]);
 			break;
 		case 2:
-				if (dir == DIR_RIGHT || dir == DIR_LEFT) set_sprite_data(0, 4, &lizzie_spr_tiles[4*32]);
-				else if (dir == DIR_DOWN) set_sprite_data(0, 4, &lizzie_spr_tiles[10*32]);
-				else if (dir == DIR_UP) set_sprite_data(0, 4, &lizzie_spr_tiles[16*32]);
+				if (dir == DIR_RIGHT) set_sprite_data(0, 4, &lizzie_spr_tiles[4*32]);
+				else if (dir == DIR_LEFT) set_sprite_data(0, 4, &lizzie_spr_tiles[10*32]);
+				else if (dir == DIR_DOWN) set_sprite_data(0, 4, &lizzie_spr_tiles[16*32]);
+				else if (dir == DIR_UP) set_sprite_data(0, 4, &lizzie_spr_tiles[22*32]);
 			break;
 		case 3:
-				if (dir == DIR_RIGHT || dir == DIR_LEFT) set_sprite_data(0, 4, &lizzie_spr_tiles[2*32]);
-				else if (dir == DIR_DOWN) set_sprite_data(0, 4, &lizzie_spr_tiles[8*32]);
-				else if (dir == DIR_UP) set_sprite_data(0, 4, &lizzie_spr_tiles[14*32]);
+				if (dir == DIR_RIGHT) set_sprite_data(0, 4, &lizzie_spr_tiles[2*32]);
+				else if (dir == DIR_LEFT) set_sprite_data(0, 4, &lizzie_spr_tiles[8*32]);
+				else if (dir == DIR_DOWN) set_sprite_data(0, 4, &lizzie_spr_tiles[14*32]);
+				else if (dir == DIR_UP) set_sprite_data(0, 4, &lizzie_spr_tiles[20*32]);
 			break;
 	}
 	timer++;
 }
 
-void mv_spr(uint8_t x, uint8_t y, uint8_t dir)
+void inputs(uint8_t *x, uint8_t *y, uint8_t *dir)
 {
-	if (dir == DIR_RIGHT)
-	{
-		for (uint8_t i=0; i<2; i++) set_sprite_prop(i, 0);
-		move_sprite(0, x-8, y); move_sprite(1, x, y);
+    joypad_ex(&jpads);
 
-		walking(dir);
-	}
-	else if (dir == DIR_LEFT)
-	{
-		for (uint8_t i=0; i<2; i++) set_sprite_prop(i, S_FLIPX);
-		move_sprite(0, x, y); move_sprite(1, x-8, y);
+    // if ((joypads_t) == J_BUTTON) is incorrect. Character will not move in 8 directions.
+    // Use if ((joypads_t) & J_BUTTON) instead to avoid problems.
 
-		walking(dir);
-	}
+    if (jpads.joy0 & J_RIGHT && !(jpads.joy0 & J_LEFT))
+    {
+        if (*dir == DIR_NULL) *dir = DIR_RIGHT;
+        if (colliding(*x, *y) == true) *x+=1;
+    }
+    else if (!(jpads.joy0 & J_RIGHT) && *dir == DIR_RIGHT) *dir = DIR_NULL;
 
-	if (dir == DIR_DOWN)
-	{
-		for (uint8_t i=0; i<2; i++) set_sprite_prop(i, 0);
-		move_sprite(0, x-8, y); move_sprite(1, x, y);
+    if (jpads.joy0 & J_LEFT && !(jpads.joy0 & J_RIGHT))
+    {
+        if (*dir == DIR_NULL) *dir = DIR_LEFT;
+        if (colliding(*x+16, *y) == true) *x-=1;
+    }
+    else if (!(jpads.joy0 & J_LEFT) && *dir == DIR_LEFT) *dir = DIR_NULL;
 
-		walking(dir);
-	}
-	else if (dir == DIR_UP)
-	{
-		for (uint8_t i=0; i<2; i++) set_sprite_prop(i, 0);
-		move_sprite(0, x-8, y); move_sprite(1, x, y);
+    if (jpads.joy0 & J_DOWN && !(jpads.joy0 & J_UP))
+    {
+        if (*dir == DIR_NULL) *dir = DIR_DOWN;
+        if (colliding(*x, *y+1) == true) *y+=1;
+    }
+    else if (!(jpads.joy0 & J_DOWN) && *dir == DIR_DOWN) *dir = DIR_NULL;
 
-		walking(dir);
-	}
+    if (jpads.joy0 & J_UP && !(jpads.joy0 & J_DOWN))
+    {
+        if (*dir == DIR_NULL) *dir = DIR_UP;
+        if (colliding(*x, *y-1) == true) *y-=1;
+    }
+    else if (!(jpads.joy0 & J_UP) && *dir == DIR_UP) *dir = DIR_NULL;
+
+    if (jpads.joy0 != NULL)
+    {
+    	move_sprite(0, *x-8, *y); move_sprite(1, *x, *y);
+		walking(*dir);
+    	// mv_spr(*x, *y, *dir);
+    }
+    else return;
 }
 
-void setupPlayer()
+void setupPlayer(void)
 {
 	lizzie.x = 88;
 	lizzie.y = 72;
@@ -142,9 +154,10 @@ void setupPlayer()
 	lizzie.canAnimate = true;
 	lizzie.dir = DIR_RIGHT;
 
+	set_sprite_palette(0, 1, &lizzie_spr_palettes[0]);
 	set_sprite_data(0, 4, &lizzie_spr_tiles[0]);
 	set_sprite_tile(0, 0); set_sprite_tile(1, 2);
-	for (uint8_t i=8; i<40; i++) set_sprite_tile(i, 0x7F);
-	set_sprite_palette(0, 1, &PlayerPalette[0]);
-	mv_spr(lizzie.x, lizzie.y, lizzie.dir);
+	// for (uint8_t i=8; i<40; i++) set_sprite_tile(i, 0x7F);
+	move_sprite(0, lizzie.x-8, lizzie.y); move_sprite(1, lizzie.x, lizzie.y);
+	walking(lizzie.dir);
 }
