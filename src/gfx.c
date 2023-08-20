@@ -3,7 +3,10 @@
 #include <gb/gb.h>
 #include <gb/cgb.h>
 #include <stdio.h>
-#include "inc/main.h"
+
+#include "inc/funcs.h"
+
+uint8_t fadevel = 4;
 
 void fadeout(UWORD palette[4])
 {
@@ -11,18 +14,11 @@ void fadeout(UWORD palette[4])
     {
         for (uint8_t i=0; i<4; i++)
         {
-            switch(i)
-            {
-                case 0:
-                    BGP_REG = 0xE4; break;
-                case 1:
-                    BGP_REG = 0xF9; break;
-                case 2:
-                    BGP_REG = 0xFE; break;
-                case 3:
-                    BGP_REG = 0xFF; break;
-            }
-            perfomantDelay(4);
+            (i==1)?BGP_REG = 0xE4:0;
+            (i==2)?BGP_REG = 0xF9:0;
+            (i==3)?BGP_REG = 0xFE:0;
+            (i==4)?BGP_REG = 0xFF:0;
+            vblankDelay(fadevel);
         }
     }
     else
@@ -38,7 +34,7 @@ void fadeout(UWORD palette[4])
             if(palette[0] >= RGB(2, 2, 2)) palette[0] -= RGB(1, 1, 1);
             else palette[0] = RGB(1, 1, 1);
             set_bkg_palette(0, 1, &palette[0]);
-            perfomantDelay(4);
+            vblankDelay(fadevel);
         }
     }
 }
@@ -59,7 +55,7 @@ void fadein(UWORD from[4], UWORD to[4], uint8_t modify)
                 case 2:
                     BGP_REG = 0xE4; break;
             }
-            perfomantDelay(4);
+            vblankDelay(fadevel);
         }
     }
     else

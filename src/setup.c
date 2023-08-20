@@ -7,9 +7,12 @@
 #include "Maps/TestMap.h"
 
 #include "inc/main.h"
+#include "inc/funcs.h"
 #include "inc/camera.h"
 #include "inc/lizzie.h"
 #include "inc/gfx.h"
+
+#define Map_base 0x00
 
 joypads_t jpads;
 
@@ -20,12 +23,12 @@ void setup(void)
 {
     joypad_init(1, &jpads);
 
-    set_bkg_data(0x24, sizeof(TestMap_tiles)>>4, TestMap_tiles);
+    set_bkg_data(Map_base, sizeof(TestMap_tiles)>>4, TestMap_tiles);
     
     if (_cpu == CGB_TYPE)
         {cpu_fast(); for (uint8_t ii=0; ii < 2; ii++) set_bkg_palette(ii, 1, &BGPaletteDark[0]);}
     
-    set_attributed_bkg_submap(0, 0, 21, 19, TestMap_map, TestMap_map_attributes, (TestMap_WIDTH>>3), 0x24);
+    set_attributed_bkg_submap(0, 0, 21, 19, TestMap_map, TestMap_map_attributes, (TestMap_WIDTH>>3), Map_base);
     setupPlayer();
 
     SPRITES_8x16;
@@ -40,8 +43,8 @@ void mainloop(void)
     while(true)
     {
         inputs(&lizzie.x, &lizzie.y, &lizzie.dir);
-        if (lizzie.x > 168 || lizzie.x < 8 || lizzie.y > 152 || lizzie.y < 8)
-            camera(TestMap_map, TestMap_map_attributes, (TestMap_WIDTH>>3), (TestMap_HEIGHT>>3), 0x24);
+        if (lizzie.x > 168 || lizzie.x < 8 || lizzie.y > 160 || lizzie.y < 16)
+            camera(TestMap_map, TestMap_map_attributes, (TestMap_WIDTH>>3), (TestMap_HEIGHT>>3), Map_base);
         else wait_vbl_done();
     }
 }

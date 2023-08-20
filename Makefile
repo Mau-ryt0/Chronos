@@ -4,6 +4,8 @@ sb: before assets build clean sbx
 
 bgb: before assets build clean bgbx
 
+emuli: before assets build clean emulix
+
 before:
 	rm -rf *.o *.gbc & clear
 
@@ -13,13 +15,20 @@ assets:
 	clear
 
 build:
-	lcc -Wm-yn"Chronos" -Wm-yc -Wm-ys -o main.gbc ./src/main.c ./src/lizzie.c ./src/camera.c ./src/gfx.c ./src/setup.c ./src/Maps/TestMap.c ./src/Tiles/Tiles.c ./src/Sprites/lizzie_spr.c
+# 	lcc -Wm-yc -Wm-ys -o logic.o ./src/main.c ./src/funcs.c ./src/lizzie.c ./src/camera.c ./src/gfx.c ./src/setup.c
+# 	lcc -Wm-yc -Wm-ys -o graphics.o ./src/Maps/TestMap.c ./src/Tiles/Tiles.c ./src/Sprites/lizzie_spr.c
+# 	lcc -Wm-yn"Chronos" -Wm-yc -Wm-ys -o main.gbc logic.o graphics.o
+	lcc -Wm-yn"Chronos" -Wm-yc -Wm-ys -o main.gbc ./src/main.c ./src/funcs.c ./src/lizzie.c ./src/camera.c ./src/gfx.c ./src/setup.c ./src/Maps/TestMap.c ./src/Tiles/Tiles.c ./src/Sprites/lizzie_spr.c
+
 
 sbx:
-	/snap/sameboy/1770/usr/bin/sameboy main.gbc 
+	sameboy main.gbc 
 
 bgbx:
 	wine /usr/local/BGB/bgb.exe main.gbc
+
+emulix:
+	emulicious main.gbc
 
 clean:
 	rm compile_files.txt -rf *.o

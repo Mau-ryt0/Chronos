@@ -10,8 +10,6 @@
 {
 }*/
 
-void perfomantDelay(UINT8 delay) {for (uint8_t d=0; d<delay; d++) wait_vbl_done();}
-
 void main(void)
 {
     setup();

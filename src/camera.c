@@ -66,7 +66,7 @@ void camera(const unsigned char *map, const unsigned char *attr, const uint8_t M
 	}
 
 	// Down scroll.
-	if (lizzie.y > 152 && cameray < (MapHeight*4))
+	if (lizzie.y > 160 && cameray < (MapHeight*4))
 	{
 		for (uint8_t i = 0; i < 144/SC_VEL; i++)
 		{
@@ -79,7 +79,7 @@ void camera(const unsigned char *map, const unsigned char *attr, const uint8_t M
 	}
 
 	//	Up scroll.
-	if (lizzie.y < 8 && cameray > 0)
+	if (lizzie.y < 16 && cameray > 0)
 	{
 		for (uint8_t i = 0; i < 144/SC_VEL; i++)
 		{
