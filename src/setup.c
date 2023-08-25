@@ -28,7 +28,7 @@ void setup(void)
     if (_cpu == CGB_TYPE)
         {cpu_fast(); for (uint8_t ii=0; ii < 2; ii++) set_bkg_palette(ii, 1, &BGPaletteDark[0]);}
     
-    set_attributed_bkg_submap(0, 0, 21, 19, TestMap_map, TestMap_map_attributes, (TestMap_WIDTH>>3), Map_base);
+    set_attributed_bkg_submap(0, 0, 20, 18, TestMap_map, TestMap_map_attributes, (TestMap_WIDTH>>3), Map_base);
     setupPlayer();
 
     SPRITES_8x16;
@@ -43,7 +43,7 @@ void mainloop(void)
     while(true)
     {
         inputs(&lizzie.x, &lizzie.y, &lizzie.dir);
-        if (lizzie.x > 168 || lizzie.x < 8 || lizzie.y > 160 || lizzie.y < 16)
+        if (lizzie.x > 160 || lizzie.x == 0 || lizzie.y > 144 || lizzie.y == 0)
             camera(TestMap_map, TestMap_map_attributes, (TestMap_WIDTH>>3), (TestMap_HEIGHT>>3), Map_base);
         else wait_vbl_done();
     }

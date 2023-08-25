@@ -10,7 +10,7 @@ before:
 	rm -rf *.o *.gbc & clear
 
 assets:
-	png2asset Assets/lizzie_spr.png -c src/Sprites/lizzie_spr.c -spr8x16 -noflip -keep_duplicate_tiles
+	png2asset Assets/lizzie_spr.png -c src/Sprites/lizzie_spr.c -spr8x16 -sw 16 -sh 16 -noflip -keep_duplicate_tiles
 	png2asset Assets/TestMap.png -c src/Maps/TestMap.c -map -noflip -use_map_attributes
 	clear
 

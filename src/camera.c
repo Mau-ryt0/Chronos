@@ -11,25 +11,25 @@
 #include "inc/lizzie.h"
 #include "inc/setup.h"
 
-//#define MIN(A,B) ((A)<(B)?(A):(B))
-
-#define DIR_RIGHT 1
-#define DIR_LEFT 2
-#define DIR_DOWN 3
-#define DIR_UP 4
+// Defined in lizzie.h
+// #define DIR_RIGHT 1
+// #define DIR_LEFT -1
+// #define DIR_DOWN 2
+// #define DIR_UP -2
+// #define DIR_NULL 0
 
 #define SC_VEL 4
 
 uint16_t camerax, cameray;
 
-void scroll_sprites(uint8_t sprites, uint8_t direction, uint8_t vel)
+void scroll_sprites(uint8_t sprites, int8_t _dir, uint8_t vel)
 {
 	for (uint8_t i = 0; i < sprites; i++)
 	{
-		if (direction == DIR_RIGHT) scroll_sprite(i, vel, 0);
-		else if (direction == DIR_LEFT) scroll_sprite(i, -vel, 0);
-		else if (direction == DIR_DOWN) scroll_sprite(i, 0, vel);
-		else if (direction == DIR_UP) scroll_sprite(i, 0, -vel);
+		if (_dir == DIR_RIGHT) scroll_sprite(i, vel, 0);
+		else if (_dir == DIR_LEFT) scroll_sprite(i, -vel, 0);
+		else if (_dir == DIR_DOWN) scroll_sprite(i, 0, vel);
+		else if (_dir == DIR_UP) scroll_sprite(i, 0, -vel);
 	}
 }
 
@@ -40,7 +40,7 @@ void scroll_sprites(uint8_t sprites, uint8_t direction, uint8_t vel)
 void camera(const unsigned char *map, const unsigned char *attr, const uint8_t MapWidth, const uint8_t MapHeight, uint8_t base)
 {
 	// Right scroll.
-	if (lizzie.x > 168 && camerax < (MapWidth*4))
+	if (lizzie.x > 160 && camerax < (MapWidth*4))
 	{
 		for (uint8_t i = 0; i < 160/SC_VEL; i++)
 		{
@@ -53,7 +53,7 @@ void camera(const unsigned char *map, const unsigned char *attr, const uint8_t M
 	}
 
 	// Left scroll.
-	if (lizzie.x < 8 && camerax > 0)
+	if (lizzie.x == 0 && camerax > 0)
 	{
 		for (uint8_t i = 0; i < 160/SC_VEL; i++)
 		{
@@ -66,7 +66,7 @@ void camera(const unsigned char *map, const unsigned char *attr, const uint8_t M
 	}
 
 	// Down scroll.
-	if (lizzie.y > 160 && cameray < (MapHeight*4))
+	if (lizzie.y > 144 && cameray < (MapHeight*4))
 	{
 		for (uint8_t i = 0; i < 144/SC_VEL; i++)
 		{
@@ -79,7 +79,7 @@ void camera(const unsigned char *map, const unsigned char *attr, const uint8_t M
 	}
 
 	//	Up scroll.
-	if (lizzie.y < 16 && cameray > 0)
+	if (lizzie.y == 0 && cameray > 0)
 	{
 		for (uint8_t i = 0; i < 144/SC_VEL; i++)
 		{
