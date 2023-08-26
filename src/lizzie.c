@@ -46,8 +46,8 @@ bool done = false;
 bool colliding(uint16_t x, uint16_t y)
 {
 	// Divide the player's position by 8 to index it to a tile position.
-	uint16_t column = ((camerax>>3)+x)/8;
-	uint16_t row = ((cameray>>3)+y)/8;
+	uint16_t column = (camerax>>3)+x/8;
+	uint16_t row = (cameray>>3)+y/8;
     uint16_t TileIndex = TestMap_map[column + row * (TestMap_WIDTH>>3)];
     
     // Get the tile based on the index variable.
