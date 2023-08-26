@@ -19,7 +19,7 @@ struct character
 	uint8_t x, y;
 	uint8_t width;
 	uint8_t height;
-	// uint8_t hearts;
+	uint8_t hearts;
 	// uint8_t old_hearts;
 	// uint8_t health, old_health;
 	int8_t dir;

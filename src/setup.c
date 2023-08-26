@@ -12,7 +12,7 @@
 #include "inc/lizzie.h"
 #include "inc/gfx.h"
 
-#define Map_base 0x00
+#define Map_base 0x24
 
 joypads_t jpads;
 
@@ -22,6 +22,9 @@ UWORD BGPaletteDark[4] = {RGB8(73, 60, 41), RGB8(73, 60, 41), RGB8(57, 44, 26), 
 void setup(void)
 {
     joypad_init(1, &jpads);
+
+    WY_REG = 144;
+    WX_REG = 7;
 
     set_bkg_data(Map_base, sizeof(TestMap_tiles)>>4, TestMap_tiles);
     
@@ -33,6 +36,7 @@ void setup(void)
 
     SPRITES_8x16;
     SHOW_BKG;
+    SHOW_WIN;
     SHOW_SPRITES;
     // fadeout(&BGPalette6[0]);
     fadein(&BGPaletteDark[0], &BGPalette[0], 2);

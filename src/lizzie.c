@@ -7,6 +7,7 @@
 #include <gb/cgb.h>
 
 #include "Sprites/lizzie_spr.h"
+#include "Sprites/Heart.h"
 #include "Maps/TestMap.h"
 
 #include "inc/lizzie.h"
@@ -21,7 +22,10 @@
 // #define DIR_UP -2
 // #define DIR_NULL 0
 
+// for (uint8_t i=8; i<40; i++) set_sprite_tile(i, 0x7F);
+
 #define velocity 1
+#define appearvel 4
 
 struct character lizzie;
 
@@ -37,9 +41,17 @@ uint8_t solidTiles[] =
 	0x08, 0x1A, 0x10, 0x11
 };
 
+uint8_t objectTiles[] =
+{
+	0x10, 0x11
+};
+
 int8_t dir, old_dir;
 uint16_t timer, frame;
 bool done = false;
+bool showingDialog = false;
+bool pressingA = false;
+bool isColliding = false;
 
 // Function thanks to Larold's Jubilant Junkyard.
 // https://github.com/LaroldsJubilantJunkyard/gbdk-tilemap-collision
@@ -53,6 +65,19 @@ bool colliding(uint16_t x, uint16_t y)
     // Get the tile based on the index variable.
     for (uint8_t index=0; index<sizeof(solidTiles); index++)
     	if (TileIndex == solidTiles[index]) return true;
+    return false;
+}
+
+bool canInteract(uint16_t x, uint16_t y)
+{
+	// Divide the player's position by 8 to index it to a tile position.
+	uint16_t column = (camerax>>3)+x/8;
+	uint16_t row = (cameray>>3)+y/8;
+    uint16_t TileIndex = TestMap_map[column + row * (TestMap_WIDTH>>3)];
+    
+    // Get the tile based on the index variable.
+    for (uint8_t index=0; index<sizeof(objectTiles); index++)
+    	if (TileIndex == objectTiles[index]) return true;
     return false;
 }
 
@@ -121,7 +146,8 @@ void inputs(uint8_t *x, uint8_t *y, int8_t *_dir)
     if (jpads.joy0 & J_RIGHT && !(jpads.joy0 & J_LEFT))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_RIGHT;
-        if (!colliding(*x+1*7, *y))
+        bool isColliding = colliding(*x+1*7, *y+6) || colliding(*x+1*7, *y);
+        if (!isColliding && !showingDialog)
         	*x+=1;
     }
     else if (!(jpads.joy0 & J_RIGHT) && *_dir == DIR_RIGHT) *_dir = DIR_NULL;
@@ -129,7 +155,8 @@ void inputs(uint8_t *x, uint8_t *y, int8_t *_dir)
     if (jpads.joy0 & J_LEFT && !(jpads.joy0 & J_RIGHT))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_LEFT;
-        if (!colliding(*x-1*8, *y))
+        isColliding = colliding(*x-1*8, *y+6) || colliding(*x-1*8, *y);
+        if (!isColliding && !showingDialog)
         	*x-=1;
     }
     else if (!(jpads.joy0 & J_LEFT) && *_dir == DIR_LEFT) *_dir = DIR_NULL;
@@ -137,7 +164,8 @@ void inputs(uint8_t *x, uint8_t *y, int8_t *_dir)
     if (jpads.joy0 & J_DOWN && !(jpads.joy0 & J_UP))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_DOWN;
-        if (!colliding(*x, *y+1*8))
+        isColliding = colliding(*x+6, *y+1*8) || colliding(*x-7, *y+1*8);
+        if (!isColliding && !showingDialog)
         	*y+=1;
     }
     else if (!(jpads.joy0 & J_DOWN) && *_dir == DIR_DOWN) *_dir = DIR_NULL;
@@ -145,12 +173,31 @@ void inputs(uint8_t *x, uint8_t *y, int8_t *_dir)
     if (jpads.joy0 & J_UP && !(jpads.joy0 & J_DOWN))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_UP;
-        if (!colliding(*x, *y-1*2))
+        isColliding = colliding(*x+6, *y-1*2) || colliding(*x-7, *y-1*2);
+        if (!isColliding && !showingDialog)
         	*y-=1;
     }
     else if (!(jpads.joy0 & J_UP) && *_dir == DIR_UP) *_dir = DIR_NULL;
 
-    if (jpads.joy0 != NULL)
+    if (canInteract(*x, *y-1*4) && jpads.joy0 & J_A && pressingA == false)
+    {
+    	pressingA = true;
+    	if (showingDialog == false)
+    	{
+    		showingDialog = true;
+	    	for (uint8_t i=0; i<(48/appearvel); i++)
+	    		{scroll_win(0, -appearvel); wait_vbl_done();}
+    	}
+    	else
+    	{
+    		showingDialog = false;
+    		for (uint8_t i=0; i<(48/appearvel); i++)
+	    		{scroll_win(0, appearvel); wait_vbl_done();}
+	    }
+	}
+	if (pressingA == true && !(jpads.joy0 & J_A)) pressingA = false;
+
+    if (jpads.joy0 != NULL && !showingDialog)
     	{move_sprite(0, *x, *y+8); move_sprite(1, *x+8, *y+8); walking(*_dir);}
     else return;
 }
@@ -163,12 +210,30 @@ void setupPlayer(void)
 	lizzie.height = 16;
 	lizzie.canMove = true;
 	lizzie.canAnimate = true;
+	lizzie.hearts = 3;
 	lizzie.dir = DIR_RIGHT;
 
+	// Loads Character's Sprites.
 	set_sprite_palette(0, 1, &lizzie_spr_palettes[0]);
 	set_sprite_data(0, 4, &lizzie_spr_tiles[0]);
+
+	// Loads Heart's Sprites.
+	set_sprite_palette(1, 1, &Heart_palettes[0]);
+	set_sprite_data(0x7E, 1,&Heart_tiles[0]);
+
+	// Put Character's Sprites in OAM.
 	set_sprite_tile(0, 0); set_sprite_tile(1, 2);
-	// for (uint8_t i=8; i<40; i++) set_sprite_tile(i, 0x7F);
+
+	// Put Heart Sprites in OAM.
+	for (uint8_t i=0; i<3; i++) set_sprite_tile(i+37, 0x7E);
+
+	// Move Character's Sprites to initial position.
 	move_sprite(0, lizzie.x, lizzie.y+8); move_sprite(1, lizzie.x+8, lizzie.y+8);
+
+	// Move Hearts Sprites to its position.
+	move_sprite(37, 8, 16); move_sprite(38, 13, 24); move_sprite(39, 18, 16);
+	for (uint8_t i=0; i<3; i++) set_sprite_prop(i+37, 1);
+
+	// Set the initial Character's Sprites according to it's initial direction.
 	walking(lizzie.dir);
 }
