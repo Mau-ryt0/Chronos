@@ -46,33 +46,14 @@ bool done = false;
 bool colliding(uint16_t x, uint16_t y)
 {
 	// Divide the player's position by 8 to index it to a tile position.
-	uint16_t column = (camerax>>3)+x/8;
-	uint16_t row = (cameray>>3)+y/8;
+	uint16_t column = ((camerax>>3)+x)/8;
+	uint16_t row = ((cameray>>3)+y)/8;
     uint16_t TileIndex = TestMap_map[column + row * (TestMap_WIDTH>>3)];
     
     // Get the tile based on the index variable.
-    return
-    	TileIndex == solidTiles[0]||
-    	TileIndex == solidTiles[1]||
-    	TileIndex == solidTiles[2]||
-    	TileIndex == solidTiles[3]||
-    	TileIndex == solidTiles[4]||
-    	TileIndex == solidTiles[5]||
-    	TileIndex == solidTiles[6]||
-    	TileIndex == solidTiles[7]||
-    	TileIndex == solidTiles[8]||
-    	TileIndex == solidTiles[9]||
-    	TileIndex == solidTiles[10]||
-    	TileIndex == solidTiles[11]||
-    	TileIndex == solidTiles[12]||
-    	TileIndex == solidTiles[13]||
-    	TileIndex == solidTiles[14]||
-    	TileIndex == solidTiles[15]||
-    	TileIndex == solidTiles[16]||
-    	TileIndex == solidTiles[17]||
-    	TileIndex == solidTiles[18]||
-    	TileIndex == solidTiles[19]
-    	?true:false;
+    for (uint8_t index=0; index<sizeof(solidTiles); index++)
+    	if (TileIndex == solidTiles[index]) return true;
+    return false;
 }
 
 void walking(int8_t _dir)
