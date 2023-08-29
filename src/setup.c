@@ -4,7 +4,13 @@
 #include <gb/cgb.h>
 #include <stdio.h>
 
+#include "Tiles/MapTiles.h"
+#include "Tiles/DialogTiles.h"
+
 #include "Maps/TestMap.h"
+#include "Maps/Dialog.h"
+
+#include "inc/setup.h"
 
 #include "inc/main.h"
 #include "inc/funcs.h"
@@ -12,7 +18,9 @@
 #include "inc/lizzie.h"
 #include "inc/gfx.h"
 
-#define Map_base 0x24
+// Defined in setup.h
+// #define Map_base 0x24
+#define Dialog_base (sizeof(MapTiles_tiles)>>4)+Map_base
 
 joypads_t jpads;
 
@@ -26,12 +34,14 @@ void setup(void)
     WY_REG = 144;
     WX_REG = 7;
 
-    set_bkg_data(Map_base, sizeof(TestMap_tiles)>>4, TestMap_tiles);
+    set_bkg_data(Map_base, sizeof(MapTiles_tiles)>>4, MapTiles_tiles);
+    set_bkg_data(Dialog_base, sizeof(DialogTiles_tiles)>>4, DialogTiles_tiles);
     
     if (_cpu == CGB_TYPE)
         {cpu_fast(); for (uint8_t ii=0; ii < 2; ii++) set_bkg_palette(ii, 1, &BGPaletteDark[0]);}
     
     set_attributed_bkg_submap(0, 0, 20, 18, TestMap_map, TestMap_map_attributes, (TestMap_WIDTH>>3), Map_base);
+    set_win_based_tiles(0, 0, 20, 6, Dialog_map, Dialog_base);
     setupPlayer();
 
     SPRITES_8x16;

@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #include "Maps/TestMap.h"
-#include "Tiles/Tiles.h"
 
 #include "inc/camera.h"
 #include "inc/main.h"
