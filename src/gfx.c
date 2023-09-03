@@ -14,10 +14,10 @@ void fadeout(UWORD palette[4])
     {
         for (uint8_t i=0; i<4; i++)
         {
-            (i==1)?BGP_REG = 0xE4:0;
-            (i==2)?BGP_REG = 0xF9:0;
-            (i==3)?BGP_REG = 0xFE:0;
-            (i==4)?BGP_REG = 0xFF:0;
+            BGP_REG=(i==1)?0xE4:0;
+            BGP_REG=(i==2)?0xF9:0;
+            BGP_REG=(i==3)?0xFE:0;
+            BGP_REG=(i==4)?0xFF:0;
             vblankDelay(fadevel);
         }
     }

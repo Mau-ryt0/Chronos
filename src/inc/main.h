@@ -7,8 +7,8 @@
 
 #include "lizzie.h"
 
-// #define vblankDelay(d) for (uint8_t i=0; i<d; i++) wait_vbl_done();
-
 extern uint8_t dpad;
+
+extern void main(void);
 
 #endif

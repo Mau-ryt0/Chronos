@@ -7,6 +7,7 @@
 
 #include "inc/camera.h"
 #include "inc/main.h"
+#include "inc/funcs.h"
 #include "inc/lizzie.h"
 #include "inc/setup.h"
 
@@ -18,6 +19,8 @@
 // #define DIR_NULL 0
 
 #define SC_VEL 4
+
+struct map Test;
 
 uint16_t camerax, cameray;
 
@@ -39,8 +42,9 @@ void scroll_sprites(uint8_t sprites, int8_t _dir, uint8_t vel)
 void camera(const unsigned char *map, const unsigned char *attr, const uint8_t MapWidth, const uint8_t MapHeight, uint8_t base)
 {
 	// Right scroll.
-	if (lizzie.x > 160 && camerax < (MapWidth*4))
+	if (lizzie.x > 166 && camerax < (MapWidth*4))
 	{
+		Test.x+=1;
 		for (uint8_t i = 0; i < 160/SC_VEL; i++)
 		{
 			camerax += SC_VEL;
@@ -52,8 +56,9 @@ void camera(const unsigned char *map, const unsigned char *attr, const uint8_t M
 	}
 
 	// Left scroll.
-	if (lizzie.x == 0 && camerax > 0)
+	if (lizzie.x <= -6 && camerax > 0)
 	{
+		Test.x-=1;
 		for (uint8_t i = 0; i < 160/SC_VEL; i++)
 		{
 			camerax -= SC_VEL;
@@ -67,6 +72,7 @@ void camera(const unsigned char *map, const unsigned char *attr, const uint8_t M
 	// Down scroll.
 	if (lizzie.y > 144 && cameray < (MapHeight*4))
 	{
+		Test.y+=1;
 		for (uint8_t i = 0; i < 144/SC_VEL; i++)
 		{
 			cameray += SC_VEL;
@@ -78,8 +84,9 @@ void camera(const unsigned char *map, const unsigned char *attr, const uint8_t M
 	}
 
 	//	Up scroll.
-	if (lizzie.y == 0 && cameray > 0)
+	if (lizzie.y <= 0 && cameray > 0)
 	{
+		Test.y-=1;
 		for (uint8_t i = 0; i < 144/SC_VEL; i++)
 		{
 			cameray -= SC_VEL;

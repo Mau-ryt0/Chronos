@@ -5,6 +5,7 @@
 // #include <stdbool.h>
 
 #include <gb/cgb.h>
+#include <stdlib.h>
 
 #include "Sprites/lizzie_spr.h"
 #include "Sprites/Heart.h"
@@ -43,6 +44,7 @@ uint16_t timer, frame;
 bool done = false;
 bool showingDialog = false;
 bool pressingA = false;
+bool pressingB = false;
 bool isColliding = false;
 
 void walking(int8_t _dir)
@@ -100,7 +102,7 @@ void walking(int8_t _dir)
 	timer++;
 }
 
-void inputs(uint8_t *x, uint8_t *y, int8_t *_dir)
+void inputs(int16_t *x, int16_t *y, int8_t *_dir)
 {
     joypad_ex(&jpads);
 
@@ -110,7 +112,7 @@ void inputs(uint8_t *x, uint8_t *y, int8_t *_dir)
     if (jpads.joy0 & J_RIGHT && !(jpads.joy0 & J_LEFT))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_RIGHT;
-        isColliding = colliding(*x+1*7, *y+6) || colliding(*x+1*7, *y+4);
+        isColliding = colliding(*x+1*7, *y+7) || colliding(*x+1*7, *y+1);
         if (!isColliding && !showingDialog)
         	*x+=1;
     }
@@ -119,7 +121,7 @@ void inputs(uint8_t *x, uint8_t *y, int8_t *_dir)
     if (jpads.joy0 & J_LEFT && !(jpads.joy0 & J_RIGHT))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_LEFT;
-        isColliding = colliding(*x-1*8, *y+6) || colliding(*x-1*8, *y+4);
+        isColliding = colliding(*x-1*8, *y+7) || colliding(*x-1*8, *y+1);
         if (!isColliding && !showingDialog)
         	*x-=1;
     }
@@ -143,23 +145,45 @@ void inputs(uint8_t *x, uint8_t *y, int8_t *_dir)
     }
     else if (!(jpads.joy0 & J_UP) && *_dir == DIR_UP) *_dir = DIR_NULL;
 
-    if (canInteract(*x-7, *y-1*4) && jpads.joy0 & J_A && pressingA == false)
+    if (jpads.joy0 & J_A && !pressingA)
     {
     	pressingA = true;
-    	if (showingDialog == false)
+    	if (canInteract(*x-7, *y-1*4))
     	{
-    		showingDialog = true;
-	    	for (uint8_t i=0; i<(48/appearvel); i++)
-	    		{scroll_win(0, -appearvel); wait_vbl_done();}
-    	}
-    	else
-    	{
-    		showingDialog = false;
-    		for (uint8_t i=0; i<(48/appearvel); i++)
-	    		{scroll_win(0, appearvel); wait_vbl_done();}
-	    }
+	    	if (showingDialog == false)
+	    	{
+	    		showingDialog = true;
+	    		fill_win_rect(1, 1, 18, 4, 0x00);
+		    	for (uint8_t i=0; i<(48/appearvel); i++)
+		    		{scroll_win(0, -appearvel); wait_vbl_done();}
+		    	
+		    	const unsigned char text[] = "abc the text test no. 1";
+		    	// const unsigned char abc[] = "abcdefghijklmnopqrstvwxyz";
+		    	win_print(text, sizeof(text));
+	    	}
+	    	else
+	    	{
+	    		showingDialog = false;
+	    		for (uint8_t i=0; i<(48/appearvel); i++)
+		    		{scroll_win(0, appearvel); wait_vbl_done();}
+		    }
+		}
 	}
-	if (pressingA == true && !(jpads.joy0 & J_A)) pressingA = false;
+	else if (pressingA == true && !(jpads.joy0 & J_A)) pressingA = false;
+
+	if (jpads.joy0 & J_B && !pressingB)
+	{
+		pressingB = true;
+		if (lizzie.hearts != 0 && !showingDialog) lizzie.hearts--;
+	}
+	else if (pressingB == true && !(jpads.joy0 & J_B)) pressingB = false;
+
+	if (lizzie.old_hearts != lizzie.hearts)
+	{
+		lizzie.old_hearts = lizzie.hearts;
+		for (uint8_t i=0; i<3; i++) set_sprite_tile(i+37, 0x7E);
+		for (uint8_t i=0; i<lizzie.hearts; i++) set_sprite_tile(i+37, 0x7C);
+	}
 
     if (jpads.joy0 != NULL && !showingDialog)
     	{move_sprite(0, *x, *y+8); move_sprite(1, *x+8, *y+8); walking(*_dir);}
@@ -175,6 +199,7 @@ void setupPlayer(void)
 	lizzie.canMove = true;
 	lizzie.canAnimate = true;
 	lizzie.hearts = 3;
+	lizzie.old_hearts = lizzie.hearts;
 	lizzie.dir = DIR_RIGHT;
 
 	// Loads Character's Sprites.
@@ -190,13 +215,13 @@ void setupPlayer(void)
 	set_sprite_tile(0, 0); set_sprite_tile(1, 2);
 
 	// Put Heart Sprites in OAM.
-	for (uint8_t i=0; i<3; i++) set_sprite_tile(i+37, 0x7C);
+	for (uint8_t i=0; i<lizzie.hearts; i++) set_sprite_tile(i+37, 0x7C);
 
 	// Move Character's Sprites to initial position.
 	move_sprite(0, lizzie.x, lizzie.y+8); move_sprite(1, lizzie.x+8, lizzie.y+8);
 
 	// Move Hearts Sprites to its position.
-	move_sprite(37, 8, 16); move_sprite(38, 13, 24); move_sprite(39, 18, 16);
+	move_sprite(37, 9, 17); move_sprite(38, 14, 25); move_sprite(39, 19, 17);
 	for (uint8_t i=0; i<3; i++) set_sprite_prop(i+37, 1);
 
 	// Set the initial Character's Sprites according to it's initial direction.

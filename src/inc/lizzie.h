@@ -16,11 +16,11 @@
 struct character
 {
 	// UBYTE sprites[4];
-	uint8_t x, y;
+	int16_t x, y;
 	uint8_t width;
 	uint8_t height;
 	uint8_t hearts;
-	// uint8_t old_hearts;
+	uint8_t old_hearts;
 	// uint8_t health, old_health;
 	int8_t dir;
 	bool canMove, canAnimate;
@@ -28,9 +28,7 @@ struct character
 
 extern struct character lizzie;
 
-// extern bool colliding(uint8_t x, uint8_t y, uint8_t dir);
-extern bool colliding(uint16_t x, uint16_t y);
-extern void inputs(uint8_t *x, uint8_t *y, int8_t *dir);
+extern void inputs(int16_t *x, int16_t *y, int8_t *dir);
 extern void setupPlayer(void);
 
 #endif

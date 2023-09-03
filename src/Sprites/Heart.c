@@ -7,7 +7,7 @@
 BANKREF(Heart)
 
 const palette_color_t Heart_palettes[4] = {
-	RGB8(  0,  0,  0), RGB8(213, 46, 46), RGB8(129, 34, 34), RGB8(  0,  0,  0)
+	RGB8(  0,  0,  0), RGB8(230, 67, 59), RGB8(170, 39, 35), RGB8( 39, 39, 39)
 	
 };
 
