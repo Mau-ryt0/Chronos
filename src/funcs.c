@@ -64,6 +64,17 @@ void win_print(unsigned char *text, uint8_t size)
     }
 }
 
+void scroll_sprites(uint8_t sprites, int8_t _dir, uint8_t vel)
+{
+    for (uint8_t i = 0; i < sprites; i++)
+    {
+        if (_dir == DIR_RIGHT) scroll_sprite(i, vel, 0);
+        else if (_dir == DIR_LEFT) scroll_sprite(i, -vel, 0);
+        else if (_dir == DIR_DOWN) scroll_sprite(i, 0, vel);
+        else if (_dir == DIR_UP) scroll_sprite(i, 0, -vel);
+    }
+}
+
 // Function thanks to Larold's Jubilant Junkyard.
 // https://github.com/LaroldsJubilantJunkyard/gbdk-tilemap-collision
 bool colliding(int16_t x, int16_t y)

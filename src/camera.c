@@ -24,17 +24,6 @@ struct map Test;
 
 uint16_t camerax, cameray;
 
-void scroll_sprites(uint8_t sprites, int8_t _dir, uint8_t vel)
-{
-	for (uint8_t i = 0; i < sprites; i++)
-	{
-		if (_dir == DIR_RIGHT) scroll_sprite(i, vel, 0);
-		else if (_dir == DIR_LEFT) scroll_sprite(i, -vel, 0);
-		else if (_dir == DIR_DOWN) scroll_sprite(i, 0, vel);
-		else if (_dir == DIR_UP) scroll_sprite(i, 0, -vel);
-	}
-}
-
 // The method to get the camera is that you load specific tiles.
 // For that you should get the tile position in the tilemap, by dividing the Game Boy's background position by 8.
 // It will give you a position in tiles, something that the Game Boy can understand.

@@ -1,12 +1,10 @@
 GAME DOCUMENTATION
 
+For the moment, I just will put a description of all the created functions.
+
+<-------------------------------------------------------->
+
 main.c
-
-void perfomantdelay(UINT8 delay)
-Is a function to wait a certain amount of frames.
-
-void input()
-get the inputs of the controllers.
 
 void main()
 This is the main function.
@@ -23,13 +21,65 @@ Set the main loop of the game.
 
 <-------------------------------------------------------->
 
+lizzie.c
+
+void walking(int8_t _dir)
+Animation system. (Will change the function name soon).
+
+void inputs(int16_t *x, int16_t *y, int8_t *_dir)
+Manage the inputs console and its actions in game.
+
+void setupPlayer(void)
+Setups the player and its systems.
+
+<-------------------------------------------------------->
+
+funcs.h
+
+#define vblakDelay(UINT8 delay)
+Is a function to wait a certain amount of frames.
+
+funcs.c
+
+void VBL_isr(void)
+VBlank routine.
+
+void play(const hUGESong_t Song)
+Play a song made with hUGETracker.
+
+void win_print(unsigned char *text, uint8_t size)
+Print a character or an string (character array) on the window.
+
+void scroll_sprites(uint8_t sprites, int8_t _dir, uint8_t vel)
+Scrolls various sprites at the same time.
+
+// Function thanks to Larold's Jubilant Junkyard.
+// https://github.com/LaroldsJubilantJunkyard/gbdk-tilemap-collision
+bool colliding(int16_t x, int16_t y)
+Return a true value if the sprite is colliding.
+
+bool canInteract(int16_t x, int16_t y)
+Return a true value if the sprite can interact with an object in the Background.
+
+<-------------------------------------------------------->
+
+camera.h
+
+inline void set_attributed_bkg_submap(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const unsigned char *map, const unsigned char *attr, const uint8_t MapWidth, uint8_t base)
+Set tiles with the attribute map. (Function provided by Toxa).
+
 camera.c
 
-inline void set_attributed_bkg_tiles(UBYTE x, UBYTE y, UBYTE w, UBYTE h, const UBYTE * map, const UBYTE * attr, const UBYTE MapWidth, uint8_t base)
-Set tiles with the attribute map.
+void camera(const unsigned char *map, const unsigned char *attr, const uint8_t MapWidth, const uint8_t MapHeight, uint8_t base)
+Camera routine. Detailed function description in the file.
 
-static void updateMap(uint8_t dir, const unsigned char * MapPlane0, const unsigned char * MapPlane1, uint8_t base)
-Change the map tiles.
+<-------------------------------------------------------->
 
-void camera(const unsigned char * MapPlane0, const unsigned char * MapPlane1, uint8_t base)
-This do the room changing routine.
+gfx.c
+
+void fadeout(UWORD palette[4])
+Fade out the given palette. (Change pending).
+
+void fadein(UWORD from[4], UWORD to[4], uint8_t modify)
+Fade in from one specific palette to another. And the quantity of palettes to modify. (Change pending).
+

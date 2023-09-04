@@ -41,7 +41,6 @@ void fadeout(UWORD palette[4])
 
 void fadein(UWORD from[4], UWORD to[4], uint8_t modify)
 {
-    from[0]; to[0];
     if (_cpu != CGB_TYPE)
     {
         for (uint8_t i=0; i<3; i++)
