@@ -3,7 +3,7 @@
 #ifndef _SETUP_H_INCLUDE
 #define _SETUP_H_INCLUDE
 
-#define Map_base 0x33
+#define Map_base 0x34
 
 extern joypads_t jpads;
 

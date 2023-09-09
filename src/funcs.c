@@ -2,6 +2,7 @@
 
 #include <gb/gb.h>
 #include <gb/cgb.h>
+#include <gbdk/platform.h>
 #include <stdbool.h>
 
 #include "Maps/TestMap.h"
@@ -12,7 +13,11 @@
 #include "inc/main.h"
 #include "inc/camera.h"
 
+#define appearvel 4
+
 // unsigned char *current=0;
+
+bool showingDialog = false;
 
 const unsigned char symbols[] =
 {
@@ -21,6 +26,10 @@ const unsigned char symbols[] =
 };
 
 // const unsigned char numbers[] = {};
+
+const unsigned char text[] = "abc the text test no. 1";
+const unsigned char funfact[] = "if you didn't know, you can talk to me if you press the a button, but you already know. the text test no. 2";
+const unsigned char abc[] = "abcdefghijklmnopqrstvwxyz";
 
 uint8_t solidTiles[] =
 {
@@ -44,22 +53,56 @@ void play(const hUGESong_t Song)
     __critical {hUGE_init(&Song);}
 }
 
+void show_dialog(uint16_t x, uint16_t y)
+{
+    if (canInteract(x-7, y-1*4))
+    {
+        if (showingDialog == false)
+        {
+            showingDialog = true;
+            fill_win_rect(1, 1, 18, 4, 0x00);
+            for (uint8_t i=0; i<(48/appearvel); i++)
+                {scroll_win(0, -appearvel); wait_vbl_done();}
+
+            if(Test.x == 0) win_print(text, sizeof(text));
+            else if (Test.x == 1) win_print(funfact, sizeof(funfact));
+        }
+        else
+        {
+            showingDialog = false;
+            for (uint8_t i=0; i<(48/appearvel); i++)
+                {scroll_win(0, appearvel); wait_vbl_done();}
+        }
+    }
+}
+
 void win_print(unsigned char *text, uint8_t size)
 {
-    uint8_t xpos=1, ypos=0;
+    uint8_t xpos=0, ypos=0;
     uint8_t index=0;
     
-    while (index<=size-1)
+    while (index<(size-1))
     {
-        if (index % 18 == 0) {xpos=1; ypos++;}
+        if (xpos % 18 == 0) {xpos=1; ypos++;}
         else xpos++;
+
+        (xpos == 1 && text[index] == ' ')?index++:index;
+        if (xpos == 18 && text[index] != ' '
+            && text[index+1] != ' ') // This line is optional. Just remember to close the brackets.
+            {set_win_tile_xy(xpos, ypos, ('-'-0x20)); xpos=1; ypos++;}
 
         const unsigned char *current = &text[index];
 
-        if (*current != ' ') set_win_tile_xy(xpos, ypos, (*current-0x48));
+        if (ypos > 4)
+            {waitpad(J_A); fill_win_rect(1, 1, 18, 4, 0x00); xpos=1; ypos=1;}
+
+        if (*current != ' ') set_win_tile_xy(xpos, ypos, (*current-0x47));
+
         for (uint8_t i=0; i<(sizeof(symbols)); i++)
-            if (*current == symbols[i]) set_win_tile_xy(xpos, ypos, (*current-0x21));
-        vblankDelay(textvel2);
+            if (*current == symbols[i]) set_win_tile_xy(xpos, ypos, (*current-0x20));
+
+        if (!(jpads.joy0 & J_B)) vblankDelay(textvel2);
+
         index++;
     }
 }

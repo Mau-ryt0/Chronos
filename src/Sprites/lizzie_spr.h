@@ -11,7 +11,7 @@
 #define lizzie_spr_TILE_H 16
 #define lizzie_spr_WIDTH 16
 #define lizzie_spr_HEIGHT 16
-#define lizzie_spr_TILE_COUNT 60
+#define lizzie_spr_TILE_COUNT 48
 #define lizzie_spr_PALETTE_COUNT 1
 #define lizzie_spr_COLORS_PER_PALETTE 4
 #define lizzie_spr_TOTAL_COLORS 4
@@ -19,7 +19,7 @@
 BANKREF_EXTERN(lizzie_spr)
 
 extern const palette_color_t lizzie_spr_palettes[4];
-extern const uint8_t lizzie_spr_tiles[960];
+extern const uint8_t lizzie_spr_tiles[768];
 
 
 #endif

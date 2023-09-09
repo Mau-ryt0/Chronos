@@ -32,7 +32,6 @@
 // for (uint8_t i=8; i<40; i++) set_sprite_tile(i, 0x7F);
 
 #define velocity 1
-#define appearvel 4
 
 struct character lizzie;
 
@@ -42,7 +41,6 @@ struct character lizzie;
 int8_t dir, old_dir;
 uint16_t timer, frame;
 bool done = false;
-bool showingDialog = false;
 bool pressingA = false;
 bool pressingB = false;
 bool isColliding = false;
@@ -148,33 +146,14 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_A && !pressingA)
     {
     	pressingA = true;
-    	if (canInteract(*x-7, *y-1*4))
-    	{
-	    	if (showingDialog == false)
-	    	{
-	    		showingDialog = true;
-	    		fill_win_rect(1, 1, 18, 4, 0x00);
-		    	for (uint8_t i=0; i<(48/appearvel); i++)
-		    		{scroll_win(0, -appearvel); wait_vbl_done();}
-		    	
-		    	const unsigned char text[] = "abc the text test no. 1";
-		    	// const unsigned char abc[] = "abcdefghijklmnopqrstvwxyz";
-		    	win_print(text, sizeof(text));
-	    	}
-	    	else
-	    	{
-	    		showingDialog = false;
-	    		for (uint8_t i=0; i<(48/appearvel); i++)
-		    		{scroll_win(0, appearvel); wait_vbl_done();}
-		    }
-		}
+    	show_dialog(*x, *y);
 	}
 	else if (pressingA == true && !(jpads.joy0 & J_A)) pressingA = false;
 
 	if (jpads.joy0 & J_B && !pressingB)
 	{
 		pressingB = true;
-		if (lizzie.hearts != 0 && !showingDialog) lizzie.hearts--;
+		// if (lizzie.hearts != 0 && !showingDialog) lizzie.hearts--;
 	}
 	else if (pressingB == true && !(jpads.joy0 & J_B)) pressingB = false;
 

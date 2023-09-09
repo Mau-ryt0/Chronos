@@ -11,12 +11,12 @@ before:
 
 assets:
 	png2asset Assets/lizzie_spr.png -c src/Sprites/lizzie_spr.c -spr8x16 -sw 16 -sh 16 -noflip -keep_duplicate_tiles -tiles_only
+	png2asset Assets/Heart.png -c src/Sprites/Heart.c -spr8x8 -tiles_only
 	png2asset Assets/TestMap.png -c src/Maps/TestMap.c -map -source_tileset Assets/MapTiles.png -noflip -use_map_attributes
-	png2asset Assets/MapTiles.png -c src/Tiles/MapTiles.c -tiles_only -map -noflip -no_palettes
-	png2asset Assets/Font.png -c src/UI/Font.c -tiles_only -map -no_flip -no_palettes -keep_duplicated_tiles
+	png2asset Assets/MapTiles.png -c src/Tiles/MapTiles.c -map -tiles_only -noflip -no_palettes
+	png2asset Assets/Font.png -c src/UI/Font.c -map -tiles_only -noflip -no_palettes -keep_duplicated_tiles
 	png2asset Assets/Dialog.png -c src/Maps/Dialog.c -map -source_tileset Assets/DialogTiles.png -noflip -use_map_attributes
 	png2asset Assets/DialogTiles.png -c src/Tiles/DialogTiles.c -tiles_only -map -noflip
-	png2asset Assets/Heart.png -c src/Sprites/Heart.c -spr8x8 -tiles_only
 	clear
 
 build:

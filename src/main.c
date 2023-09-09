@@ -19,5 +19,6 @@ void main(void)
     set_interrupts(IE_REG | VBL_IFLAG);
     setup();
     play(Menuet);
+    wait_vbl_done();
     mainloop();
 }

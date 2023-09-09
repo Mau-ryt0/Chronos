@@ -11,11 +11,11 @@
 #define Font_TILE_H 8
 #define Font_WIDTH 416
 #define Font_HEIGHT 8
-#define Font_TILE_COUNT 51
+#define Font_TILE_COUNT 52
 
 BANKREF_EXTERN(Font)
 
-extern const uint8_t Font_tiles[816];
+extern const uint8_t Font_tiles[832];
 
 
 #endif

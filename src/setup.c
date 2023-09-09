@@ -34,10 +34,7 @@ UWORD BGPaletteDark[4] = {RGB8(73, 60, 41), RGB8(73, 60, 41), RGB8(57, 44, 26), 
 
 void setup(void)
 {
-    HIDE_BKG;
-    HIDE_WIN;
-
-    fill_bkg_rect(0, 0, 31, 31, 0x00);
+    // fill_bkg_rect(0, 0, 31, 31, 0x00);
 
     joypad_init(1, &jpads);
 
