@@ -21,13 +21,13 @@ all: clean assets build
 
 # This just execute the game.
 sbx:
-    $(SBPATH) $(PROVTITLE).gbc
+	$(SBPATH) $(PROVTITLE).gbc
 
 bgbx:
-    $(BGBPATH) $(PROVTITLE).gbc
+	$(BGBPATH) $(PROVTITLE).gbc
 
 emulix:
-    $(EMULIPATH) $(PROVTITLE).gbc
+	$(EMULIPATH) $(PROVTITLE).gbc
 
 # This build and execute the game.
 # syntax: make [emulator]
