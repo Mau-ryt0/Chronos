@@ -64,8 +64,8 @@ void show_dialog(uint16_t x, uint16_t y)
             for (uint8_t i=0; i<(48/appearvel); i++)
                 {scroll_win(0, -appearvel); wait_vbl_done();}
 
-            if(Test.x == 0) win_print(text, sizeof(text));
-            else if (Test.x == 1) win_print(funfact, sizeof(funfact));
+            if(*room[0]->x == 0) win_print(text, sizeof(text));
+            else if (room[0]->x == 1) win_print(funfact, sizeof(funfact));
         }
         else
         {
@@ -120,16 +120,16 @@ void scroll_sprites(uint8_t sprites, int8_t _dir, uint8_t vel)
 
 // Function thanks to Larold's Jubilant Junkyard.
 // https://github.com/LaroldsJubilantJunkyard/gbdk-tilemap-collision
-bool colliding(int16_t x, int16_t y)
+bool colliding(int16_t x, int16_t y, bkgmap *load)
 {
 	// Divide the player's position by 8 to index it to a tile position.
-	int16_t column = (camerax>>3)+x/8;
-	int16_t row = (cameray>>3)+y/8;
-    int16_t TileIndex = TestMap_map[column + row * (TestMap_WIDTH>>3)];
+	int16_t column = (camerax>>3)+(x>>3);
+	int16_t row = (cameray>>3)+(y>>3);
+    int16_t TileIndex = load->map[column + row * (TestMap_WIDTH>>3)];
     
     // Get the tile based on the index variable.
     for (uint8_t index=0; index<sizeof(solidTiles); index++)
-    	if (TileIndex == solidTiles[index] && camerax >= (Test.x*20) && cameray >= (Test.y*18)) return true;
+    	if (TileIndex == solidTiles[index] && camerax >= (load->x*20) && cameray >= (load->y*18)) return true;
     return false;
 }
 

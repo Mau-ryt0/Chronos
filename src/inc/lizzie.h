@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "funcs.h"
+
 #define DIR_RIGHT 1
 #define DIR_LEFT -1
 #define DIR_DOWN 2
@@ -28,7 +30,7 @@ struct character
 
 extern struct character lizzie;
 
-extern void inputs(int16_t *x, int16_t *y, int8_t *dir);
+extern void inputs(int16_t *x, int16_t *y, int8_t *_dir, bkgmap *load);
 extern void setupPlayer(void);
 
 #endif

@@ -20,6 +20,21 @@
 #include "inc/lizzie.h"
 #include "inc/gfx.h"
 
+#include "Ost/Menuet.h"
+
+bkgmap test =
+{
+    .x=0,
+    .y=0,
+    .maps[0][0]=TestMap_map,
+    .maps[1][0]=TestMap_map_attributes,
+    .width=TestMap_WIDTH,
+    .height=TestMap_HEIGHT
+};
+
+bkgmap *room[1] = {&test};
+bkgmap currlvl = room[0];
+
 // Defined in setup.h
 // #define Map_base 0x24
 #define Dialog_base (sizeof(MapTiles_tiles)>>4)+Map_base
@@ -34,7 +49,8 @@ UWORD BGPaletteDark[4] = {RGB8(73, 60, 41), RGB8(73, 60, 41), RGB8(57, 44, 26), 
 
 void setup(void)
 {
-    // fill_bkg_rect(0, 0, 31, 31, 0x00);
+    CRITICAL {add_VBL(&VBL_isr);}
+    set_interrupts(IE_REG | VBL_IFLAG);
 
     joypad_init(1, &jpads);
 
@@ -48,7 +64,7 @@ void setup(void)
     if (_cpu == CGB_TYPE)
         {cpu_fast(); for (uint8_t ii=0; ii < 2; ii++) set_bkg_palette(ii, 1, &BGPaletteDark[0]);}
     
-    set_attributed_bkg_submap(0, 0, 20, 18, TestMap_map, TestMap_map_attributes, (TestMap_WIDTH>>3), Map_base);
+    set_attributed_bkg_submap(0, 0, 20, 18, &currlvl, Map_base);
     set_win_based_tiles(0, 0, 20, 6, Dialog_map, Dialog_base);
     setupPlayer();
 
@@ -58,15 +74,16 @@ void setup(void)
     SHOW_SPRITES;
     // fadeout(&BGPalette6[0]);
     fadein(&BGPaletteDark[0], &BGPalette[0], 2);
+    play(Menuet);
 }
 
 void mainloop(void)
 {
     while(true)
     {
-        inputs(&lizzie.x, &lizzie.y, &lizzie.dir);
+        inputs(&lizzie.x, &lizzie.y, &lizzie.dir, &currlvl);
         if (lizzie.x > 166 || lizzie.x < -6 || lizzie.y > 144 || lizzie.y == 0)
-            camera(TestMap_map, TestMap_map_attributes, (TestMap_WIDTH>>3), (TestMap_HEIGHT>>3), Map_base);
+            camera(&currlvl, Map_base);
         else wait_vbl_done();
     }
 }

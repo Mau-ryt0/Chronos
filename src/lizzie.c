@@ -100,7 +100,7 @@ void walking(int8_t _dir)
 	timer++;
 }
 
-void inputs(int16_t *x, int16_t *y, int8_t *_dir)
+void inputs(int16_t *x, int16_t *y, int8_t *_dir, bkgmap *load)
 {
     joypad_ex(&jpads);
 
@@ -110,7 +110,8 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_RIGHT && !(jpads.joy0 & J_LEFT))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_RIGHT;
-        isColliding = colliding(*x+1*7, *y+7) || colliding(*x+1*7, *y+1);
+        // if (isColliding!=true)
+        	isColliding = colliding(*x+1*7, *y+7, load) || colliding(*x+1*7, *y+1, load);
         if (!isColliding && !showingDialog)
         	*x+=1;
     }
@@ -119,7 +120,8 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_LEFT && !(jpads.joy0 & J_RIGHT))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_LEFT;
-        isColliding = colliding(*x-1*8, *y+7) || colliding(*x-1*8, *y+1);
+        // if (isColliding!=true)
+        	isColliding = colliding(*x-1*8, *y+7, load) || colliding(*x-1*8, *y+1, load);
         if (!isColliding && !showingDialog)
         	*x-=1;
     }
@@ -128,7 +130,8 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_DOWN && !(jpads.joy0 & J_UP))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_DOWN;
-        isColliding = colliding(*x+6, *y+1*8) || colliding(*x-7, *y+1*8);
+        // if (isColliding!=true)
+        	isColliding = colliding(*x+6, *y+1*8, load) || colliding(*x-7, *y+1*8, load);
         if (!isColliding && !showingDialog)
         	*y+=1;
     }
@@ -137,7 +140,8 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_UP && !(jpads.joy0 & J_DOWN))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_UP;
-        isColliding = colliding(*x+6, *y-1/2) || colliding(*x-7, *y-1/2);
+        // if (isColliding!=true)
+        	isColliding = colliding(*x+6, *y-1/2, load) || colliding(*x-7, *y-1/2, load);
         if (!isColliding && !showingDialog)
         	*y-=1;
     }

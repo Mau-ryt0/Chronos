@@ -50,7 +50,7 @@ build:
 # 	lcc -Wm-yc -Wm-ys -o logic.o ./src/main.c ./src/funcs.c ./src/lizzie.c ./src/camera.c ./src/gfx.c ./src/setup.c
 # 	lcc -Wm-yc -Wm-ys -o graphics.o ./src/Maps/TestMap.c ./src/Tiles/Tiles.c ./src/Sprites/lizzie_spr.c
 # 	lcc -Wm-yn"Chronos" -Wm-yc -Wm-ys -o main.gbc logic.o graphics.o
-	$(LCC) -Wl-lsrc/inc/hUGEDriver.lib -Wm-yn"$(PROVTITLE)" -Wm-yc -Wm-ys -o $(PROVTITLE).gbc $(MAINSOURCE) $(TILESOURCE) $(MAPSOURCE) $(OSTSOURCE)
+	$(LCC) -v -autobank -Wl-lsrc/inc/hUGEDriver.lib -Wm-yn"$(PROVTITLE)" -Wm-yc -Wm-ys -o $(PROVTITLE).gbc $(MAINSOURCE) $(TILESOURCE) $(MAPSOURCE) $(OSTSOURCE)
 
 clean:
 	rm -f *.o *.lst *.map *.gbc *.ihx *.sym *.cdb *.adb
