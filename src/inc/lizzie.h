@@ -30,7 +30,7 @@ struct character
 
 extern struct character lizzie;
 
-extern void inputs(int16_t *x, int16_t *y, int8_t *_dir, bkgmap *load);
+extern void inputs(int16_t *x, int16_t *y, int8_t *_dir);
 extern void setupPlayer(void);
 
 #endif

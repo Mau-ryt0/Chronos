@@ -3,7 +3,12 @@
 #ifndef _SETUP_H_INCLUDE
 #define _SETUP_H_INCLUDE
 
+#include "funcs.h"
+
 #define Map_base 0x34
+
+
+extern bkgmap currlvl;
 
 extern joypads_t jpads;
 
