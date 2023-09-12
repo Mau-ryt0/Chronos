@@ -128,8 +128,9 @@ bool colliding(int16_t x, int16_t y, const unsigned char *map)
     int16_t TileIndex = map[column + row * (currlvl.width>>3)];
     
     // Get the tile based on the index variable.
-    for (uint8_t index=0; index<sizeof(solidTiles); index++)
-    	if (TileIndex == solidTiles[index] && camerax >= (currlvl.x*20) && cameray >= (currlvl.y*18)) return true;
+    for (uint8_t index=0; index<sizeof(map); index++)
+    	if (TileIndex == map[index]) return true;
+            // camerax >= (currlvl.x*20) && cameray >= (currlvl.y*18)) return true;
     return false;
 }
 

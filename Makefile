@@ -13,8 +13,8 @@ PROVTITLE = Chronos
 # Game sources.
 MAINSOURCE := ./src/main.c ./src/funcs.c ./src/lizzie.c ./src/camera.c ./src/gfx.c ./src/setup.c
 TILESOURCE := ./src/Tiles/MapTiles.c ./src/UI/Font.c ./src/Tiles/DialogTiles.c ./src/Sprites/Heart.c ./src/Sprites/lizzie_spr.c
-MAPSOURCE := ./src/Maps/TestMap.c ./src/Maps/Dialog.c
-OSTSOURCE := ./src/Ost/Menuet.c
+MAPSOURCE := ./src/Maps/TestMap.c ./src/Maps/WaterSpring.c ./src/Maps/Dialog.c
+OSTSOURCE := ./src/Ost/Menuet.c ./src/Ost/Spring.c
 
 # This just build the game.
 all: clean assets build
@@ -39,9 +39,13 @@ emuli: clean assets build emulix
 assets:
 	$(P2A) Assets/lizzie_spr.png -c src/Sprites/lizzie_spr.c -spr8x16 -sw 16 -sh 16 -noflip -keep_duplicate_tiles -tiles_only
 	$(P2A) Assets/Heart.png -c src/Sprites/Heart.c -spr8x8 -tiles_only
+
 	$(P2A) Assets/TestMap.png -c src/Maps/TestMap.c -map -source_tileset Assets/MapTiles.png -noflip -use_map_attributes
 	$(P2A) Assets/MapTiles.png -c src/Tiles/MapTiles.c -map -tiles_only -noflip -no_palettes
+	$(P2A) Assets/WaterSpring.png -c src/Maps/WaterSpring.c -map -noflip -use_map_attributes
+
 	$(P2A) Assets/Font.png -c src/UI/Font.c -map -tiles_only -noflip -no_palettes -keep_duplicated_tiles
+
 	$(P2A) Assets/Dialog.png -c src/Maps/Dialog.c -map -source_tileset Assets/DialogTiles.png -noflip -use_map_attributes
 	$(P2A) Assets/DialogTiles.png -c src/Tiles/DialogTiles.c -tiles_only -map -noflip
 	clear

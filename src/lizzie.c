@@ -39,70 +39,56 @@ struct character lizzie;
 // UWORD PlayerPalette[4] = {RGB8(196, 207, 161), RGB8(139, 149, 109), RGB8(77, 83, 60), RGB8(31, 31, 31)};
 
 int8_t dir, old_dir;
-uint16_t timer, frame;
+uint8_t timer, frame;
 bool done = false;
 bool pressingA = false;
 bool pressingB = false;
 bool isColliding = false;
 
-void walking(int8_t _dir)
+void walking(void)
 {
-	if (old_dir != _dir) {timer = frame = 0; old_dir = _dir;}
-	
-	if (_dir == DIR_RIGHT || _dir == DIR_LEFT)
-	{
-		if (timer > 8)
-		{
-			if (frame < 3) frame++;
-			else frame = 0;
-			timer = 0;
-		}
-	}
-	else if (_dir == DIR_DOWN || _dir == DIR_UP)
-	{
-		if (timer > 6)
-		{
-			if (frame < 3) frame++;
-			else frame = 0;
-			timer = 0;
-		}
-	}
-	
-	done = (timer<=0)?false:true;
+	timer = (old_dir != lizzie.dir)?0:timer;
+	old_dir = lizzie.dir;
 
-	switch (frame)
+	switch (lizzie.dir)
 	{
-		case 0:
-				if (_dir == DIR_RIGHT && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[0]);
-				else if (_dir == DIR_LEFT && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[6*32]);
-				else if (_dir == DIR_DOWN && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[12*32]);
-				else if (_dir == DIR_UP && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[18*32]);
+		case DIR_RIGHT:
+			if (timer == 0) set_sprite_data(0, 4, &lizzie_spr_tiles[0]);
+			else if (timer == 6) set_sprite_data(0, 4, &lizzie_spr_tiles[1*64]);
+			else if (timer == 12) set_sprite_data(0, 4, &lizzie_spr_tiles[2*64]);
+			else if (timer == 18) set_sprite_data(0, 4, &lizzie_spr_tiles[1*64]);
 			break;
-		case 1:
-				if (_dir == DIR_RIGHT && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[2*32]);
-				else if (_dir == DIR_LEFT && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[8*32]);
-				else if (_dir == DIR_DOWN && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[14*32]);
-				else if (_dir == DIR_UP && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[20*32]);
+
+		case DIR_LEFT:
+			if (timer == 0) set_sprite_data(0, 4, &lizzie_spr_tiles[3*64]);
+			else if (timer == 6) set_sprite_data(0, 4, &lizzie_spr_tiles[4*64]);
+			else if (timer == 12) set_sprite_data(0, 4, &lizzie_spr_tiles[5*64]);
+			else if (timer == 18) set_sprite_data(0, 4, &lizzie_spr_tiles[4*64]);
 			break;
-		case 2:
-				if (_dir == DIR_RIGHT && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[4*32]);
-				else if (_dir == DIR_LEFT && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[10*32]);
-				else if (_dir == DIR_DOWN && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[16*32]);
-				else if (_dir == DIR_UP && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[22*32]);
+
+		case DIR_DOWN:
+			if (timer == 0) set_sprite_data(0, 4, &lizzie_spr_tiles[12*32]);
+			else if (timer == 6) set_sprite_data(0, 4, &lizzie_spr_tiles[14*32]);
+			else if (timer == 12) set_sprite_data(0, 4, &lizzie_spr_tiles[16*32]);
+			else if (timer == 18) set_sprite_data(0, 4, &lizzie_spr_tiles[14*32]);
 			break;
-		case 3:
-				if (_dir == DIR_RIGHT && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[2*32]);
-				else if (_dir == DIR_LEFT && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[8*32]);
-				else if (_dir == DIR_DOWN && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[14*32]);
-				else if (_dir == DIR_UP && done == false) set_sprite_data(0, 4, &lizzie_spr_tiles[20*32]);
+
+		case DIR_UP:
+			if (timer == 0) set_sprite_data(0, 4, &lizzie_spr_tiles[18*32]);
+			else if (timer == 6) set_sprite_data(0, 4, &lizzie_spr_tiles[20*32]);
+			else if (timer == 12) set_sprite_data(0, 4, &lizzie_spr_tiles[22*32]);
+			else if (timer == 18) set_sprite_data(0, 4, &lizzie_spr_tiles[20*32]);
 			break;
 	}
-	timer++;
+	timer = (timer > 24)?0:timer+1;
 }
 
 void inputs(int16_t *x, int16_t *y, int8_t *_dir)
 {
     joypad_ex(&jpads);
+
+	if (jpads.joy0 != NULL && !showingDialog)
+		{move_sprite(0, *x, *y+8); move_sprite(1, *x+8, *y+8); walking();}
 
     // if ((joypads_t) == J_BUTTON) is incorrect. Character will not move in 8 directions.
     // Use if ((joypads_t) & J_BUTTON) instead to avoid problems.
@@ -110,8 +96,7 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_RIGHT && !(jpads.joy0 & J_LEFT))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_RIGHT;
-        // if (isColliding!=true)
-        	// isColliding = colliding(*x+1*7, *y+7, currlvl.map) || colliding(*x+1*7, *y+1, currlvl.map);
+        isColliding = colliding(*x+1*7, *y+7, currlvl.map) || colliding(*x+1*7, *y+1, currlvl.map);
         if (!isColliding && !showingDialog)
         	*x+=1;
     }
@@ -120,8 +105,7 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_LEFT && !(jpads.joy0 & J_RIGHT))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_LEFT;
-        // if (isColliding!=true)
-        	// isColliding = colliding(*x-1*8, *y+7, currlvl.map) || colliding(*x-1*8, *y+1, currlvl.map);
+        isColliding = colliding(*x-1*8, *y+7, currlvl.map) || colliding(*x-1*8, *y+1, currlvl.map);
         if (!isColliding && !showingDialog)
         	*x-=1;
     }
@@ -130,8 +114,7 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_DOWN && !(jpads.joy0 & J_UP))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_DOWN;
-        // if (isColliding!=true)
-        	// isColliding = colliding(*x+6, *y+1*8, currlvl.map) || colliding(*x-7, *y+1*8, currlvl.map);
+        isColliding = colliding(*x+6, *y+1*8, currlvl.map) || colliding(*x-7, *y+1*8, currlvl.map);
         if (!isColliding && !showingDialog)
         	*y+=1;
     }
@@ -140,8 +123,7 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_UP && !(jpads.joy0 & J_DOWN))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_UP;
-        // if (isColliding!=true)
-        	// isColliding = colliding(*x+6, *y-1/2, currlvl.map) || colliding(*x-7, *y-1/2, currlvl.map);
+        isColliding = colliding(*x+6, *y-1/2, currlvl.map) || colliding(*x-7, *y-1/2, currlvl.map);
         if (!isColliding && !showingDialog)
         	*y-=1;
     }
@@ -167,10 +149,6 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
 		for (uint8_t i=0; i<3; i++) set_sprite_tile(i+37, 0x7E);
 		for (uint8_t i=0; i<lizzie.hearts; i++) set_sprite_tile(i+37, 0x7C);
 	}
-
-    if (jpads.joy0 != NULL && !showingDialog)
-    	{move_sprite(0, *x, *y+8); move_sprite(1, *x+8, *y+8); walking(*_dir);}
-    else return;
 }
 
 void setupPlayer(void)
@@ -208,5 +186,5 @@ void setupPlayer(void)
 	for (uint8_t i=0; i<3; i++) set_sprite_prop(i+37, 1);
 
 	// Set the initial Character's Sprites according to it's initial direction.
-	walking(lizzie.dir);
+	walking();
 }

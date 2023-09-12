@@ -16,19 +16,25 @@ extern bool showingDialog;
 
 #define vblankDelay(d) for (uint8_t i=0; i<d; i++) wait_vbl_done();
 
-typedef struct
+typedef struct level_t
 {
     uint8_t x;
     uint8_t y;
 
     const uint16_t width;
-    const uint16_t height;
+    // const uint16_t height;
 
-    const unsigned char *attr;
-    const unsigned char *map;
-}bkgmap;
+    const uint8_t *tile_data;
+    const uint8_t tile_count;
 
-extern const bkgmap *room[1];
+    const unsigned char * map;
+    const unsigned char * attr;
+
+    const palette_color_t *palettes;
+    const uint8_t palettes_count;
+
+    // const uint8_t colliders[];
+} level_t;
 
 extern void VBL_isr(void);
 extern void play(const hUGESong_t Song);

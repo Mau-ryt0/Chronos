@@ -8,7 +8,7 @@
 #define Map_base 0x34
 
 
-extern bkgmap currlvl;
+extern level_t currlvl;
 
 extern joypads_t jpads;
 
