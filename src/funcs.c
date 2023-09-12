@@ -5,17 +5,17 @@
 #include <gbdk/platform.h>
 #include <stdbool.h>
 
+// Remove and change to currlvl.maps.
 #include "Maps/TestMap.h"
 
-#include "inc/funcs.h"
-#include "inc/lizzie.h"
+#include "inc/structs.h"
+
 #include "inc/setup.h"
-#include "inc/main.h"
 #include "inc/camera.h"
 
-#define appearvel 4
+#include "inc/hUGEDriver.h"
 
-// unsigned char *current=0;
+#define appearvel 4
 
 bool showingDialog = false;
 
@@ -44,13 +44,13 @@ uint8_t objectTiles[] = {0x18, 0x19};
 
 void VBL_isr(void) {hUGE_dosound();}
 
-void play(const hUGESong_t Song)
+void play(const hUGESong_t *Song)
 {
     NR52_REG = 0x80;
     NR51_REG = 0xFF;
     NR50_REG = 0x77;
 
-    __critical {hUGE_init(&Song);}
+    __critical {hUGE_init(Song);}
 }
 
 void show_dialog(uint16_t x, uint16_t y)
@@ -128,8 +128,8 @@ bool colliding(int16_t x, int16_t y, const unsigned char *map)
     int16_t TileIndex = map[column + row * (currlvl.width>>3)];
     
     // Get the tile based on the index variable.
-    for (uint8_t index=0; index<sizeof(map); index++)
-    	if (TileIndex == map[index]) return true;
+    for (uint8_t index=0; index<sizeof(solidTiles); index++)
+    	if (TileIndex == solidTiles[index]) return true;
             // camerax >= (currlvl.x*20) && cameray >= (currlvl.y*18)) return true;
     return false;
 }

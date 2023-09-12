@@ -5,13 +5,6 @@
 
 #include "funcs.h"
 
-#define Map_base 0x34
-
-
-extern level_t currlvl;
-
-extern joypads_t jpads;
-
 extern void setup(void);
 extern void mainloop(void);
 

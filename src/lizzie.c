@@ -1,4 +1,4 @@
-// lizzie.c
+// player.c
 
 // #include <GB/gb.h>
 // #include <stdio.h>
@@ -10,19 +10,14 @@
 #include "Sprites/lizzie_spr.h"
 #include "Sprites/Heart.h"
 
-#include "Tiles/MapTiles.h"
+#include "Maps/Dialog.h"
 #include "Tiles/DialogTiles.h"
 
-#include "Maps/TestMap.h"
-#include "Maps/Dialog.h"
+#include "inc/structs.h"
 
-#include "inc/lizzie.h"
-#include "inc/setup.h"
 #include "inc/funcs.h"
-#include "inc/main.h"
-#include "inc/camera.h"
 
-// Defined in lizzie.h
+// Defined in structs.h
 // #define DIR_RIGHT 1
 // #define DIR_LEFT -1
 // #define DIR_DOWN 2
@@ -33,13 +28,11 @@
 
 #define velocity 1
 
-struct character lizzie;
-
-// Define the Player color palette.
-// UWORD PlayerPalette[4] = {RGB8(196, 207, 161), RGB8(139, 149, 109), RGB8(77, 83, 60), RGB8(31, 31, 31)};
+player_t player;
 
 int8_t dir, old_dir;
-uint8_t timer, frame;
+uint8_t timer;
+
 bool done = false;
 bool pressingA = false;
 bool pressingB = false;
@@ -47,10 +40,10 @@ bool isColliding = false;
 
 void walking(void)
 {
-	timer = (old_dir != lizzie.dir)?0:timer;
-	old_dir = lizzie.dir;
+	timer = (old_dir != player.dir)?0:timer;
+	old_dir = player.dir;
 
-	switch (lizzie.dir)
+	switch (player.dir)
 	{
 		case DIR_RIGHT:
 			if (timer == 0) set_sprite_data(0, 4, &lizzie_spr_tiles[0]);
@@ -139,32 +132,32 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
 	if (jpads.joy0 & J_B && !pressingB)
 	{
 		pressingB = true;
-		// if (lizzie.hearts != 0 && !showingDialog) lizzie.hearts--;
+		// if (player.hearts != 0 && !showingDialog) player.hearts--;
 	}
 	else if (pressingB == true && !(jpads.joy0 & J_B)) pressingB = false;
 
-	if (lizzie.old_hearts != lizzie.hearts)
+	if (player.old_hearts != player.hearts)
 	{
-		lizzie.old_hearts = lizzie.hearts;
+		player.old_hearts = player.hearts;
 		for (uint8_t i=0; i<3; i++) set_sprite_tile(i+37, 0x7E);
-		for (uint8_t i=0; i<lizzie.hearts; i++) set_sprite_tile(i+37, 0x7C);
+		for (uint8_t i=0; i<player.hearts; i++) set_sprite_tile(i+37, 0x7C);
 	}
 }
 
 void setupPlayer(void)
 {
-	lizzie.x = 80;
-	lizzie.y = 72;
-	lizzie.width = 14;
-	lizzie.height = 16;
-	lizzie.canMove = true;
-	lizzie.canAnimate = true;
-	lizzie.hearts = 3;
-	lizzie.old_hearts = lizzie.hearts;
-	lizzie.dir = DIR_RIGHT;
+	player.x = 80;
+	player.y = 72;
+	player.width = 14;
+	player.height = 16;
+	player.canMove = true;
+	player.canAnimate = true;
+	player.hearts = 3;
+	player.old_hearts = player.hearts;
+	player.dir = DIR_RIGHT;
 
 	// Loads Character's Sprites.
-	set_sprite_palette(0, 1, &lizzie_spr_palettes[0]);
+	set_sprite_palette(0, 1, &lizzie_spr_palettes[currlvl.player_palette*4]);
 	set_sprite_data(0, 4, &lizzie_spr_tiles[0]);
 
 	// Loads Heart's Sprites.
@@ -176,10 +169,10 @@ void setupPlayer(void)
 	set_sprite_tile(0, 0); set_sprite_tile(1, 2);
 
 	// Put Heart Sprites in OAM.
-	for (uint8_t i=0; i<lizzie.hearts; i++) set_sprite_tile(i+37, 0x7C);
+	for (uint8_t i=0; i<player.hearts; i++) set_sprite_tile(i+37, 0x7C);
 
 	// Move Character's Sprites to initial position.
-	move_sprite(0, lizzie.x, lizzie.y+8); move_sprite(1, lizzie.x+8, lizzie.y+8);
+	move_sprite(0, player.x, player.y+8); move_sprite(1, player.x+8, player.y+8);
 
 	// Move Hearts Sprites to its position.
 	move_sprite(37, 9, 17); move_sprite(38, 14, 25); move_sprite(39, 19, 17);

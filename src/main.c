@@ -5,7 +5,6 @@
 #include <stdbool.h>
 
 #include "inc/setup.h"
-#include "inc/funcs.h"
 
 /*void trans_LCD()
 {

@@ -5,10 +5,6 @@
 
 #include <gb/gb.h>
 
-#include "lizzie.h"
-
-extern uint8_t dpad;
-
 extern void main(void);
 
 #endif

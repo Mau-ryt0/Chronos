@@ -6,8 +6,10 @@
 
 BANKREF(lizzie_spr)
 
-const palette_color_t lizzie_spr_palettes[4] = {
+const palette_color_t lizzie_spr_palettes[8] = {
 	RGB8(  0,  0,  0), RGB8(139,149,109), RGB8( 77, 83, 60), RGB8( 31, 31, 31)
+	,
+	RGB8(  0,  0,  0), RGB8(241,248,251), RGB8(138,223,220), RGB8(119,106,107)
 	
 };
 

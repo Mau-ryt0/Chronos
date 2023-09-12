@@ -5,13 +5,12 @@
 
 #include "Maps/TestMap.h"
 
+#include "inc/structs.h"
+
 #include "inc/camera.h"
-#include "inc/main.h"
-#include "inc/funcs.h"
-#include "inc/lizzie.h"
 #include "inc/setup.h"
 
-// Defined in lizzie.h
+// Defined in structs.h
 // #define DIR_RIGHT 1
 // #define DIR_LEFT -1
 // #define DIR_DOWN 2
@@ -29,7 +28,7 @@ uint16_t camerax, cameray;
 void camera(const uint16_t MapWidth, uint8_t base)
 {
 	// Right scroll.
-	if (lizzie.x > 166)
+	if (player.x > 166)
 	{
 		currlvl.x++;
 		for (uint8_t i = 0; i < 160/SC_VEL; i++)
@@ -38,12 +37,12 @@ void camera(const uint16_t MapWidth, uint8_t base)
 			if (camerax % 8 == 0) set_attributed_bkg_submap(((camerax>>3)-1) + DEVICE_SCREEN_WIDTH, (cameray>>3), 1, 18, currlvl.map, currlvl.attr, MapWidth, base);
 			wait_vbl_done();
 			SCX_REG = camerax;
-			lizzie.x -= SC_VEL; scroll_sprites(2, DIR_LEFT, SC_VEL);
+			player.x -= SC_VEL; scroll_sprites(2, DIR_LEFT, SC_VEL);
 		}
 	}
 
 	// Left scroll.
-	if (lizzie.x <= -6)
+	if (player.x <= -6)
 	{
 		currlvl.x--;
 		for (uint8_t i = 0; i < 160/SC_VEL; i++)
@@ -52,12 +51,12 @@ void camera(const uint16_t MapWidth, uint8_t base)
 			if (camerax % 8 == 0) set_attributed_bkg_submap(camerax>>3, cameray>>3, 1, 18, currlvl.map, currlvl.attr, MapWidth, base);
 			wait_vbl_done();
 			SCX_REG = camerax;
-			lizzie.x += SC_VEL; scroll_sprites(2, DIR_RIGHT, SC_VEL);
+			player.x += SC_VEL; scroll_sprites(2, DIR_RIGHT, SC_VEL);
 		}
 	}
 
 	// Down scroll.
-	if (lizzie.y > 144)
+	if (player.y > 144)
 	{
 		currlvl.y++;
 		for (uint8_t i = 0; i < 144/SC_VEL; i++)
@@ -66,12 +65,12 @@ void camera(const uint16_t MapWidth, uint8_t base)
 			if (cameray % 8 == 0) set_attributed_bkg_submap(camerax>>3, (cameray>>3)-1 + DEVICE_SCREEN_HEIGHT, 20, 1, currlvl.map, currlvl.attr, MapWidth, base);
 			wait_vbl_done();
 			SCY_REG = cameray;
-			lizzie.y -= SC_VEL; scroll_sprites(4, DIR_UP, SC_VEL);
+			player.y -= SC_VEL; scroll_sprites(4, DIR_UP, SC_VEL);
 		}
 	}
 
 	//	Up scroll.
-	if (lizzie.y <= 0)
+	if (player.y <= 0)
 	{
 		currlvl.y--;
 		for (uint8_t i = 0; i < 144/SC_VEL; i++)
@@ -81,7 +80,7 @@ void camera(const uint16_t MapWidth, uint8_t base)
 			if (cameray % 8 == 0) set_attributed_bkg_submap(camerax>>3, cameray>>3, 20, 1, currlvl.map, currlvl.attr, MapWidth, base);
 			wait_vbl_done();
 			SCY_REG = cameray;
-			lizzie.y += SC_VEL; scroll_sprites(4, DIR_DOWN, SC_VEL);
+			player.y += SC_VEL; scroll_sprites(4, DIR_DOWN, SC_VEL);
 		}
 	}
 }

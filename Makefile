@@ -4,14 +4,14 @@ P2A = png2asset
 
 # Put your emulator PATH.
 SBPATH = sameboy
-BGBPATH = wine /usr/local/BGB/bgb.exe
+BGBPATH = bgb
 EMULIPATH = emulicious
 
 # Yes, "Chronos" is actually a provisional title.
 PROVTITLE = Chronos
 
 # Game sources.
-MAINSOURCE := ./src/main.c ./src/funcs.c ./src/lizzie.c ./src/camera.c ./src/gfx.c ./src/setup.c
+MAINSOURCE := ./src/main.c ./src/funcs.c ./src/lizzie.c ./src/camera.c ./src/gfx.c ./src/setup.c ./src/structs.c
 TILESOURCE := ./src/Tiles/MapTiles.c ./src/UI/Font.c ./src/Tiles/DialogTiles.c ./src/Sprites/Heart.c ./src/Sprites/lizzie_spr.c
 MAPSOURCE := ./src/Maps/TestMap.c ./src/Maps/WaterSpring.c ./src/Maps/Dialog.c
 OSTSOURCE := ./src/Ost/Menuet.c ./src/Ost/Spring.c
