@@ -8,7 +8,7 @@
 #include "inc/structs.h"
 
 #include "inc/camera.h"
-#include "inc/setup.h"
+#include "inc/funcs.h"
 
 // Defined in structs.h
 // #define DIR_RIGHT 1

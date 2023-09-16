@@ -23,28 +23,37 @@
 extern joypads_t jpads;
 extern bool showingDialog;
 
+extern const unsigned char symbols[25];
+
+extern palette_color_t BGPalette[4];
+extern palette_color_t BGPaletteDark[4];
+
+extern const uint8_t solidTiles[];
+extern const uint8_t objectTiles[];
+
+extern uint8_t load_lvl;
+
 typedef struct player_t
 {
 	// UBYTE sprites[4];
 	int16_t x, y;
-	uint8_t width;
-	uint8_t height;
-	uint8_t hearts;
-	uint8_t old_hearts;
+	uint8_t width, height;
+	uint8_t hearts, old_hearts;
 	// uint8_t health, old_health;
-	int8_t dir;
-	bool canMove, canAnimate;
+	int8_t dir, old_dir;
+	bool canAnimate;
 }player_t;
 
 extern player_t player;
 
 typedef struct level_t
 {
+    const uint8_t lvl_num;
     uint8_t x;
     uint8_t y;
 
     const uint16_t width;
-    // const uint16_t height;
+    const uint16_t height;
 
     const uint8_t *tile_data;
     const uint8_t tile_count;
@@ -52,14 +61,15 @@ typedef struct level_t
     const unsigned char * map;
     const unsigned char * attr;
 
+    const uint8_t *solids;
+    const uint8_t *objects;
+
     const palette_color_t *palettes;
     const uint8_t palettes_count;
 
     const uint8_t player_palette;
 
     const hUGESong_t *song;
-
-    // const uint8_t colliders[];
 } level_t;
 
 extern const level_t levels[];

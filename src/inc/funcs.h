@@ -15,6 +15,6 @@ extern void win_print(unsigned char *text, uint8_t size);
 extern void scroll_sprites(uint8_t sprites, int8_t _dir, uint8_t vel);
 
 extern bool colliding(int16_t x, int16_t y, const unsigned char *map);
-extern bool canInteract(int16_t x, int16_t y);
+extern bool canInteract(int16_t x, int16_t y, const unsigned char *map);
 
 #endif
