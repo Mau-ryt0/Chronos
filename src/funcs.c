@@ -30,7 +30,7 @@ void play(const hUGESong_t *Song)
 {
 	NR52_REG = 0x80;
 	NR51_REG = 0xFF;
-	NR50_REG = 0x77;
+	NR50_REG = vol_7;
 
 	__critical {hUGE_init(Song);}
 }
@@ -48,35 +48,39 @@ void scroll_sprites(uint8_t sprites, int8_t _dir, uint8_t vel)
 
 // Function thanks to Larold's Jubilant Junkyard.
 // https://github.com/LaroldsJubilantJunkyard/gbdk-tilemap-collision
-bool colliding(int16_t x, int16_t y, const unsigned char *map)
+bool colliding(uint8_t x, uint8_t y, const unsigned char *map)
 {
 	// Divide the player's position by 8 to index it to a tile position.
-	int16_t column = (camerax>>3)+(x>>3);
-	int16_t row = (cameray>>3)+(y>>3);
-	int16_t TileIndex = map[column + row * (currlvl.width>>3)];
+	uint8_t TileIndex = map [
+        ((camerax>>3)+x) + ((cameray>>3)+y) * (currlvl.width>>3)
+    ];
 	
 	uint8_t index=0;
-	uint8_t cc=0;
 
 	// Get the tile based on the index variable.
 	while (index<27)
 	{
 		if (TileIndex == currlvl.solids[index]) return true;
-		index++;
+		else index++;
 	}
 	return false;
 }
 
-bool canInteract(int16_t x, int16_t y, const unsigned char *map)
+bool canInteract(uint8_t x, uint8_t y, const unsigned char *map)
 {
 	// Divide the player's position by 8 to index it to a tile position.
-	int16_t column = (camerax>>3)+(x>>3);
-	int16_t row = (cameray>>3)+(y>>3);
-	int16_t TileIndex = map[column + row * (currlvl.width>>3)];
-	
-	// Get the tile based on the index variable.
-	for (uint8_t index=0; index<3; index++)
-		if (TileIndex == currlvl.objects[index]) return true;
+	uint8_t TileIndex = map [
+        ((camerax>>3)+x) + ((cameray>>3)+y) * (currlvl.width>>3)
+    ];
+
+	uint8_t index=0;
+
+    // Get the tile based on the index variable.
+    while (index<3)
+    {
+        if (TileIndex == currlvl.objects[index]) return true;
+        else index++;
+    }
 	return false;
 }
 
@@ -111,9 +115,9 @@ void win_print(unsigned char *text, uint8_t size)
 	}
 }
 
-void show_dialog(uint16_t x, uint16_t y)
+void show_dialog(uint8_t x, uint8_t y)
 {
-	if (canInteract(x-7, y-1*4, currlvl.map))
+	if (canInteract((x-7)>>3, (y-1*4)>>3, currlvl.map))
 	{
 		if (showingDialog == false)
 		{

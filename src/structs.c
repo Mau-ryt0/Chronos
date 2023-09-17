@@ -9,8 +9,10 @@
 
 #include "Ost/Ost.h"
 
-#define TestRoom_lvl 0
-#define WaterSpring_lvl 1
+#define lvl_0 0
+#define lvl_1 1
+
+uint8_t load_lvl = lvl_0;
 
 const unsigned char symbols[25] =
 {
@@ -32,8 +34,6 @@ const uint8_t Lvl_0_solids[] =
 
 const uint8_t Lvl_0_objects[] = {0x18, 0x19};
 
-uint8_t load_lvl = TestRoom_lvl;
-
 // Set the player data.
 player_t player =
 {
@@ -45,7 +45,6 @@ player_t player =
 	.old_hearts = 3,
 	.dir = DIR_RIGHT
 };
-
 
 // This set the levels data.
 const level_t levels[] =

@@ -4,9 +4,11 @@
 #include <gb/cgb.h>
 #include <stdio.h>
 
+#include "inc/structs.h"
+
 #include "inc/funcs.h"
 
-uint8_t fadevel = 4;
+#define fadeDelay 2
 
 void cfadeout(palette_color_t *from, const palette_color_t *to)
 {
@@ -25,7 +27,7 @@ void cfadeout(palette_color_t *from, const palette_color_t *to)
 			to[0];
 
 		set_bkg_palette(0, 1, from);
-		vblankDelay(fadevel);
+		wait_vbl_done();
 	}
 }
 
@@ -58,23 +60,40 @@ void cfadein(palette_color_t *from, const palette_color_t *to)
 
 void fadeout(void)
 {
-	for (uint8_t i=0; i<4; i++)
+	for (uint8_t i=0; i<6; i++)
 	{
-		BGP_REG=(i==1)?0xE4:0x00;
-		BGP_REG=(i==2)?0xF9:0x00;
-		BGP_REG=(i==3)?0xFE:0x00;
-		BGP_REG=(i==4)?0xFF:0x00;
-		vblankDelay(fadevel);
+		if (i==0)
+            {BGP_REG=0b11100100; NR50_REG=vol_6;}
+        else if (i==1)
+            NR50_REG=vol_5;
+        else if (i==2)
+            {BGP_REG=0b11111001; NR50_REG=vol_4;}
+        else if (i==3)
+            NR50_REG=vol_3;
+        else if (i==4)
+            {BGP_REG=0b11111110; NR50_REG=vol_2;}
+        else if (i==5)
+		    NR50_REG=vol_1;
+        else if (i==6)
+            {BGP_REG=0b11111111; NR50_REG=vol_0;}
+
+		vblankDelay(fadeDelay);
 	}
 }
 
 void fadein(void)
 {
-	for (uint8_t i=0; i<3; i++)
+	for (uint8_t i=0; i<4; i++)
 	{
-		BGP_REG = (i==0)?0xFE:0x00;
-		BGP_REG = (i==1)?0xF9:0x00;
-		BGP_REG = (i==2)?0xE4:0x00;
-		vblankDelay(fadevel);
+        if (i==0)
+            BGP_REG=0b11111111;
+        else if (i==1)
+            BGP_REG=0b11111110;
+        else if (i==2)
+            BGP_REG=0b11111001;
+        else if (i==3)
+            BGP_REG=0b11100100;
+
+		vblankDelay(3);
 	}
 }

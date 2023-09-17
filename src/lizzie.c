@@ -10,7 +10,6 @@
 #include "Sprites/lizzie_spr.h"
 #include "UI/Heart.h"
 
-#include "Maps/Dialog.h"
 #include "Tiles/DialogTiles.h"
 
 #include "inc/structs.h"
@@ -87,7 +86,7 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_RIGHT && !(jpads.joy0 & J_LEFT))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_RIGHT;
-        isColliding = colliding(*x+1*7, *y+7, currlvl.map) || colliding(*x+1*7, *y+1, currlvl.map);
+        isColliding = colliding((*x+1*7)>>3, (*y+7)>>3, currlvl.map) || colliding((*x+1*7)>>3, (*y+1)>>3, currlvl.map);
         if (!isColliding && !showingDialog && (*x+7) != currlvl.width)
         	*x+=1;
     }
@@ -97,7 +96,7 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_LEFT && !(jpads.joy0 & J_RIGHT))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_LEFT;
-        isColliding = colliding(*x-1*8, *y+7, currlvl.map) || colliding(*x-1*8, *y+1, currlvl.map);
+        isColliding = colliding((*x-1*8)>>3, (*y+7)>>3, currlvl.map) || colliding((*x-1*8)>>3, (*y+1)>>3, currlvl.map);
         if (!isColliding && !showingDialog)
        		*x-=1;
     }
@@ -107,7 +106,7 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_DOWN && !(jpads.joy0 & J_UP))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_DOWN;
-        isColliding = colliding(*x+6, *y+1*8, currlvl.map) || colliding(*x-7, *y+1*8, currlvl.map);
+        isColliding = colliding((*x+6)>>3, (*y+1*8)>>3, currlvl.map) || colliding((*x-7)>>3, (*y+1*8)>>3, currlvl.map);
         if (!isColliding && !showingDialog && (*y+8) != currlvl.height)
         	*y+=1;
     }
@@ -117,7 +116,7 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
     if (jpads.joy0 & J_UP && !(jpads.joy0 & J_DOWN))
     {
         if (*_dir == DIR_NULL) *_dir = DIR_UP;
-        isColliding = colliding(*x+6, *y-1/2, currlvl.map) || colliding(*x-7, *y-1/2, currlvl.map);
+        isColliding = colliding((*x+6)>>3, (*y-1/2)>>3, currlvl.map) || colliding((*x-7)>>3, (*y-1/2)>>3, currlvl.map);
         if (!isColliding && !showingDialog)
        		*y-=1;
     }
@@ -136,7 +135,7 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
 	if (jpads.joy0 & J_B && !pressingB)
 	{
 		pressingB = true;
-		load_lvl = 1;
+		load_lvl = (load_lvl == 0 && !showingDialog)?1:0;
 		// if (player.hearts != 0 && !showingDialog) player.hearts--;
 	}
 	else if (pressingB == true && !(jpads.joy0 & J_B)) pressingB = false;
@@ -162,20 +161,26 @@ void setupPlayer(void)
 
 	// Loads Heart's Sprites.
 	set_sprite_palette(1, 1, &Heart_palettes[0]);
-	set_sprite_data(0x7C, 1,&Heart_tiles[0]);
-	set_sprite_data(0x7E, 1,&Heart_tiles[2*8]);
+	set_sprite_data(0x7D, 1,&Heart_tiles[0]);
+	// set_sprite_data(0x7E, 1,&Heart_tiles[2*8]);
 
 	// Put Character's Sprites in OAM.
 	set_sprite_tile(0, 0); set_sprite_tile(1, 2);
 
 	// Put Heart Sprites in OAM.
-	for (uint8_t i=0; i<player.hearts; i++) set_sprite_tile(i+37, 0x7C);
+	for (uint8_t i=0; i<player.hearts; i++) set_sprite_tile(i+2, 0x7D);
+
+	// Put Hearts in OBP1
+	OBP1_REG=0b11100100;
+	set_sprite_prop(2, 0b00010000);
+	set_sprite_prop(3, 0b00010000);
+	set_sprite_prop(4, 0b00010000);
 
 	// Move Character's Sprites to initial position.
 	move_sprite(0, player.x, player.y+8); move_sprite(1, player.x+8, player.y+8);
 
 	// Move Hearts Sprites to its position.
-	move_sprite(37, 9, 17); move_sprite(38, 14, 25); move_sprite(39, 19, 17);
+	move_sprite(2, 9, 9); move_sprite(3, 14, 17); move_sprite(4, 19, 9);
 	for (uint8_t i=0; i<3; i++) set_sprite_prop(i+37, 1);
 
 	// Set the initial Character's Sprites according to it's initial direction.

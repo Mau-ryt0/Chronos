@@ -6,7 +6,29 @@
 
 #include "hUGEDriver.h"
 
-// #include "funcs.h"
+// Right & Left = 7
+#define vol_7 0b11101110
+
+// Right & Left = 6
+#define vol_6 0b01100110
+
+// Right & Left = 5
+#define vol_5 0b01010101
+
+// Right & Left = 4
+#define vol_4 0b01000100
+
+// Right & Left = 3
+#define vol_3 0b00110011
+
+// Right & Left = 2
+#define vol_2 0b00100010
+
+// Right & Left = 1
+#define vol_1 0b00010001
+
+// Right & Left = 0
+#define vol_0 0b00000000
 
 #define textvel1 1
 #define textvel2 2

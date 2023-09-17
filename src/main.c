@@ -19,7 +19,10 @@ const palette_color_t bp[] =
 	RGB(31, 31, 31), RGB(0, 0, 0), RGB(0, 0, 0), RGB(0, 0, 0)
 };
 
-bool block(void)
+
+// Function and assembly code by Valentina "Coffe Bat".
+// https://twitter.com/Cofebbat
+bool shouldBlock(void)
 {
 	__asm
 	ld de, #0xFFFF
@@ -36,7 +39,7 @@ bool block(void)
 
 void main(void)
 {
-	if (block())
+	if (shouldBlock())
 	{
 		if (_cpu == CGB_TYPE) set_bkg_palette(0, 1, &bp[0]);
 
@@ -46,11 +49,9 @@ void main(void)
 		font_set(font);
 
 		printf("\n <<Very important>>");
-		printf("\n This emulator is\n shit.\n");
-		printf("\n This game wont run\n on this emulator.");
+		printf("\n This emulator is\n shit.\n\n This game can't run\n on this emulator.");
 		printf("\n Change it or lick\n a dog's butt.\n");
-		printf("\n Your best options");
-		printf("\n are BGB, SameBoy,\n Emulicious, \n Gambatte, \n or others.");
+		printf("\n Your best options\n are BGB, SameBoy,\n Emulicious, \n Gambatte, \n or others.");
 	}
 	else
 	{

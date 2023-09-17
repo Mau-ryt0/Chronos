@@ -65,7 +65,7 @@ void camera(const uint16_t MapWidth, uint8_t base)
 			if (cameray % 8 == 0) set_attributed_bkg_submap(camerax>>3, (cameray>>3)-1 + DEVICE_SCREEN_HEIGHT, 20, 1, currlvl.map, currlvl.attr, MapWidth, base);
 			wait_vbl_done();
 			SCY_REG = cameray;
-			player.y -= SC_VEL; scroll_sprites(4, DIR_UP, SC_VEL);
+			player.y -= SC_VEL; scroll_sprites(2, DIR_UP, SC_VEL);
 		}
 	}
 
@@ -80,7 +80,7 @@ void camera(const uint16_t MapWidth, uint8_t base)
 			if (cameray % 8 == 0) set_attributed_bkg_submap(camerax>>3, cameray>>3, 20, 1, currlvl.map, currlvl.attr, MapWidth, base);
 			wait_vbl_done();
 			SCY_REG = cameray;
-			player.y += SC_VEL; scroll_sprites(4, DIR_DOWN, SC_VEL);
+			player.y += SC_VEL; scroll_sprites(2, DIR_DOWN, SC_VEL);
 		}
 	}
 }
