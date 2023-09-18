@@ -14,6 +14,8 @@
 {
 }*/
 
+joypads_t jpads;
+
 const palette_color_t bp[] =
 {
 	RGB(31, 31, 31), RGB(0, 0, 0), RGB(0, 0, 0), RGB(0, 0, 0)
@@ -56,8 +58,9 @@ void main(void)
 	else
 	{
 		if (_cpu == CGB_TYPE) cpu_fast();
+        joypad_init(1, &jpads);
+        currlvl = levels[load_lvl];
 		setup();
-		wait_vbl_done();
 		mainloop();
 	}
 }

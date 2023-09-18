@@ -12,7 +12,7 @@
 
 #include "inc/funcs.h"
 #include "inc/setup.h"
-#include "inc/camera.h"
+#include "inc/gfx.h"
 
 #include "inc/hUGEDriver.h"
 
@@ -28,9 +28,7 @@ void VBL_isr(void) {hUGE_dosound();}
 
 void play(const hUGESong_t *Song)
 {
-	NR52_REG = 0x80;
-	NR51_REG = 0xFF;
-	NR50_REG = vol_7;
+	NR52_REG = 0x80; NR51_REG = 0xFF; NR50_REG = vol_7;
 
 	__critical {hUGE_init(Song);}
 }
@@ -52,7 +50,7 @@ bool colliding(uint8_t x, uint8_t y, const unsigned char *map)
 {
 	// Divide the player's position by 8 to index it to a tile position.
 	uint8_t TileIndex = map [
-        ((camerax>>3)+x) + ((cameray>>3)+y) * (currlvl.width>>3)
+        ((camera.x>>3)+x) + ((camera.y>>3)+y) * (currlvl.width>>3)
     ];
 	
 	uint8_t index=0;
@@ -70,7 +68,7 @@ bool canInteract(uint8_t x, uint8_t y, const unsigned char *map)
 {
 	// Divide the player's position by 8 to index it to a tile position.
 	uint8_t TileIndex = map [
-        ((camerax>>3)+x) + ((cameray>>3)+y) * (currlvl.width>>3)
+        ((camera.x>>3)+x) + ((camera.y>>3)+y) * (currlvl.width>>3)
     ];
 
 	uint8_t index=0;

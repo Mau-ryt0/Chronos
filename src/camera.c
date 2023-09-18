@@ -19,13 +19,13 @@
 
 #define SC_VEL 4
 
-uint16_t camerax, cameray;
+camera_t camera;
 
 // The method to get the camera is that you load specific tiles.
 // For that you should get the tile position in the tilemap, by dividing the Game Boy's background position by 8.
 // It will give you a position in tiles, something that the Game Boy can understand.
 // This method should use set_bkg_based_submap(), because the first two parameters are used for both tile map position and Game Boy's Background position.
-void camera(const uint16_t MapWidth, uint8_t base)
+void camera_proc(const uint16_t MapWidth, uint8_t base)
 {
 	// Right scroll.
 	if (player.x > 166)
@@ -33,10 +33,10 @@ void camera(const uint16_t MapWidth, uint8_t base)
 		currlvl.x++;
 		for (uint8_t i = 0; i < 160/SC_VEL; i++)
 		{
-			camerax += SC_VEL;
-			if (camerax % 8 == 0) set_attributed_bkg_submap(((camerax>>3)-1) + DEVICE_SCREEN_WIDTH, (cameray>>3), 1, 18, currlvl.map, currlvl.attr, MapWidth, base);
+			camera.x += SC_VEL;
+			if (camera.x % 8 == 0) set_attributed_bkg_submap(((camera.x>>3)-1) + DEVICE_SCREEN_WIDTH, (camera.y>>3), 1, 18, currlvl.map, currlvl.attr, MapWidth, base);
 			wait_vbl_done();
-			SCX_REG = camerax;
+			SCX_REG = camera.x;
 			player.x -= SC_VEL; scroll_sprites(2, DIR_LEFT, SC_VEL);
 		}
 	}
@@ -47,10 +47,10 @@ void camera(const uint16_t MapWidth, uint8_t base)
 		currlvl.x--;
 		for (uint8_t i = 0; i < 160/SC_VEL; i++)
 		{
-			camerax -= SC_VEL;
-			if (camerax % 8 == 0) set_attributed_bkg_submap(camerax>>3, cameray>>3, 1, 18, currlvl.map, currlvl.attr, MapWidth, base);
+			camera.x -= SC_VEL;
+			if (camera.x % 8 == 0) set_attributed_bkg_submap(camera.x>>3, camera.y>>3, 1, 18, currlvl.map, currlvl.attr, MapWidth, base);
 			wait_vbl_done();
-			SCX_REG = camerax;
+			SCX_REG = camera.x;
 			player.x += SC_VEL; scroll_sprites(2, DIR_RIGHT, SC_VEL);
 		}
 	}
@@ -61,10 +61,10 @@ void camera(const uint16_t MapWidth, uint8_t base)
 		currlvl.y++;
 		for (uint8_t i = 0; i < 144/SC_VEL; i++)
 		{
-			cameray += SC_VEL;
-			if (cameray % 8 == 0) set_attributed_bkg_submap(camerax>>3, (cameray>>3)-1 + DEVICE_SCREEN_HEIGHT, 20, 1, currlvl.map, currlvl.attr, MapWidth, base);
+			camera.y += SC_VEL;
+			if (camera.y % 8 == 0) set_attributed_bkg_submap(camera.x>>3, (camera.y>>3)-1 + DEVICE_SCREEN_HEIGHT, 20, 1, currlvl.map, currlvl.attr, MapWidth, base);
 			wait_vbl_done();
-			SCY_REG = cameray;
+			SCY_REG = camera.y;
 			player.y -= SC_VEL; scroll_sprites(2, DIR_UP, SC_VEL);
 		}
 	}
@@ -75,11 +75,11 @@ void camera(const uint16_t MapWidth, uint8_t base)
 		currlvl.y--;
 		for (uint8_t i = 0; i < 144/SC_VEL; i++)
 		{
-			cameray -= SC_VEL;
+			camera.y -= SC_VEL;
 			// Note that isn't necesary to put "+ DEVICE_SCREEN_HEIGHT" because the tilemap is updating in the top of screen.
-			if (cameray % 8 == 0) set_attributed_bkg_submap(camerax>>3, cameray>>3, 20, 1, currlvl.map, currlvl.attr, MapWidth, base);
+			if (camera.y % 8 == 0) set_attributed_bkg_submap(camera.x>>3, camera.y>>3, 20, 1, currlvl.map, currlvl.attr, MapWidth, base);
 			wait_vbl_done();
-			SCY_REG = cameray;
+			SCY_REG = camera.y;
 			player.y += SC_VEL; scroll_sprites(2, DIR_DOWN, SC_VEL);
 		}
 	}

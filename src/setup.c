@@ -28,82 +28,127 @@
 
 // const int8_t waterfx[] = {1, 1, 1, 1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1};
 
-joypads_t jpads;
-
-void setup(void)
+void setupBkg(void)
 {
-	CRITICAL {add_VBL(&VBL_isr);}
-	set_interrupts(IE_REG | VBL_IFLAG);
+    // Set the Background, map and camera position.
+    SCX_REG = camera.x = (currlvl.x*20), SCY_REG = camera.y = (currlvl.y*18);
 
-	joypad_init(1, &jpads);
+    // Set the map.
+    set_bkg_data(Map_base, currlvl.tile_count, currlvl.tile_data);
+    set_attributed_bkg_submap(camera.x, camera.y, 20, 18, currlvl.map, currlvl.attr, currlvl.width, Map_base);
 
-	wait_vbl_done();
+    SHOW_BKG;
+}
 
-	currlvl = levels[load_lvl];
+void setupSprites(void)
+{
+    // Loads Character's Sprites and palette.
+    set_sprite_data(0, 4, lizzie_r_frame_1);
+    set_sprite_palette(0, 1, lizzie_p);
 
-	WY_REG = 144, WX_REG = 7;
-	SCX_REG = camerax = (currlvl.x), SCY_REG = cameray = (currlvl.y);
+    // Put Character's Sprites in OAM.
+    set_sprite_tile(0, 0); set_sprite_tile(1, 2);
 
-	const uint8_t Dialog_base = (currlvl.tile_count)+Map_base;
-
-	set_bkg_data(0x00, sizeof(Font_tiles)>>4, Font_tiles);
-	set_bkg_data(Map_base, currlvl.tile_count, currlvl.tile_data);
-	set_bkg_data(Dialog_base, sizeof(DialogTiles_tiles)>>4, DialogTiles_tiles);
-
-	set_attributed_bkg_submap(camerax, cameray, 20, 18, currlvl.map, currlvl.attr, currlvl.width, Map_base);
-	set_win_based_tiles(0, 0, 20, 6, Dialog_map, Dialog_base);
-	setupPlayer();
-
-    /*if (currlvl.lvl_num == 1)
-    {
-        set_sprite_data(0x70, 2, &Glitters_tiles[0]);
-        for (uint8_t i=2; i<18; i++) set_sprite_tile(i, 0x70);
-        for (uint8_t i=2; i<18; i++) move_sprite(i, 32, 32);
-    }*/
+    // Move Character's Sprites to initial position.
+    move_sprite(0, player.x, player.y+8); move_sprite(1, player.x+8, player.y+8);
 
     OBP0_REG=0b10010000;
 
-	SPRITES_8x16;
-	SHOW_BKG;
-	SHOW_WIN;
-	SHOW_SPRITES;
+    SPRITES_8x16;
+    SHOW_SPRITES;
+}
 
-    if (_cpu == CGB_TYPE) set_bkg_palette(0, 2, currlvl.palettes);
-    else fadein();
+void setupUI(void)
+{
+    // Loads Heart's Sprites and palette.
+    set_sprite_data(0x7D, 1, heart_t);
+    set_sprite_palette(1, 1, heart_p);
 
-	play(currlvl.song);
+    // Put Heart Sprites in OAM.
+    for (uint8_t i=0; i<player.hearts; i++) set_sprite_tile(i+2, 0x7D);
+
+    // Move Hearts Sprites to its position.
+    move_sprite(2, 9, 9); move_sprite(3, 14, 17); move_sprite(4, 19, 9);
+
+    /* Sprites properties */
+    // Put Hearts in OBP1 (if CPU == DMG).
+    if (_cpu != CGB_TYPE)
+    {
+        OBP1_REG=0b11100100;
+        for (uint8_t i=2; i<5; i++) set_sprite_prop(i, 0b00010000);
+    } // if CPU == CGB put a color palette.
+    else for (uint8_t i=2; i<5; i++) set_sprite_prop(i, 0b00000001);
+
+    // Set window position.
+    WY_REG = 144, WX_REG = 7;
+
+    // Set the font.
+    set_bkg_data(0x00, sizeof(Font_tiles)>>4, Font_tiles);
+
+    // Set the base tile of the dialog.
+    const uint8_t Dialog_base = (currlvl.tile_count)+Map_base;
+
+    // Set the dialog tiles and map.
+    set_bkg_data(Dialog_base, sizeof(DialogTiles_tiles)>>4, DialogTiles_tiles);
+    set_win_based_tiles(0, 0, 20, 6, Dialog_map, Dialog_base);
+
+    SHOW_WIN;
+}
+
+void setupMusic(void)
+{
+    // Set interrupts.
+    CRITICAL \
+        add_VBL(&VBL_isr);
+    set_interrupts(IE_REG | VBL_IFLAG);
+
+    // Play the current level song.
+    play(currlvl.song);
+}
+
+void setup(void)
+{
+    setupBkg();
+    setupSprites();
+    setupUI();
+    setupMusic();
+
+    /* WARNING! */
+    // The next line SHOULDN'T be before the setupMusic(); call or the game will crash.
+    (_cpu == CGB_TYPE)?set_bkg_palette(0, 2, currlvl.palettes):fadein();
+}
+
+void changelvl(void)
+{
+    currlvl = levels[load_lvl];
+    // Fade and hide background.
+    if (_cpu != CGB_TYPE) fadeout();
+    HIDE_BKG;
+
+    // Shut down music.
+    NR51_REG = NR52_REG = 0x00;
+
+    CRITICAL \
+        remove_VBL(&VBL_isr);
+    set_interrupts(IE_REG & ~VBL_IFLAG);
+
+    // Setup new level.
+    setupBkg();
+    setupMusic();
+
+    /* WARNING! */
+    // The next line SHOULDN'T be before the setupMusic(); call or the game will crash.
+    (_cpu == CGB_TYPE)?set_bkg_palette(0, 2, currlvl.palettes):fadein();
 }
 
 void mainloop(void)
 {
-    // uint8_t wfx_i=0;
     while(true)
 	{
-		inputs(&player.x, &player.y, &player.dir);
-        /*if (currlvl.lvl_num == 1)
-        {
-            wfx_i = (wfx_i<sizeof(waterfx))?wfx_i+1:0;
-            for (uint8_t spr_i=2; spr_i<18; spr_i++)
-                scroll_sprite(spr_i, waterfx[wfx_i], 0);
-        }*/
+		(player.x > 166 || player.x < -6 || player.y > 144 || player.y == 0)?
+            camera_proc(currlvl.width, Map_base):
+            inputs(&player.x, &player.y, &player.dir);
 
-		if (player.x > 166 || player.x < -6 || player.y > 144 || player.y == 0)
-			camera(currlvl.width, Map_base);
-		else vsync();
-		if (load_lvl != currlvl.lvl_num)
-		{
-            if (_cpu != CGB_TYPE) fadeout();
-
-			CRITICAL
-				{remove_VBL(&VBL_isr);}
-			set_interrupts(IE_REG & ~VBL_IFLAG);
-
-            NR52_REG = 0x00;
-            NR51_REG = 0x00;
-
-            HIDE_BKG;
-
-			main();
-		}
+		(load_lvl != currlvl.lvl_num)?changelvl():vsync();
 	}
 }

@@ -10,6 +10,7 @@
 
 extern void VBL_isr(void);
 extern void play(const hUGESong_t *Song);
+extern void lvlChange(void);
 extern void show_dialog(uint8_t x, uint8_t y);
 extern void win_print(unsigned char *text, uint8_t size);
 extern void scroll_sprites(uint8_t sprites, int8_t _dir, uint8_t vel);

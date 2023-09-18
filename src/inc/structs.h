@@ -4,8 +4,46 @@
 #include <gb/cgb.h>
 #include <stdbool.h>
 
+#include "../Sprites/lizzie_spr.h"
+#include "../UI/Heart.h"
+
 #include "hUGEDriver.h"
 
+#define DIR_RIGHT 1
+#define DIR_LEFT -1
+#define DIR_DOWN 2
+#define DIR_UP -2
+#define DIR_NULL 0
+
+#define Map_base 0x34
+
+// Sprites.
+#define lizzie_r_frame_1 &lizzie_spr_tiles[0]
+#define lizzie_r_frame_2 &lizzie_spr_tiles[1*64]
+#define lizzie_r_frame_3 &lizzie_spr_tiles[2*64]
+
+#define lizzie_l_frame_1 &lizzie_spr_tiles[3*64]
+#define lizzie_l_frame_2 &lizzie_spr_tiles[4*64]
+#define lizzie_l_frame_3 &lizzie_spr_tiles[5*64]
+
+#define lizzie_d_frame_1 &lizzie_spr_tiles[6*64]
+#define lizzie_d_frame_2 &lizzie_spr_tiles[7*64]
+#define lizzie_d_frame_3 &lizzie_spr_tiles[8*64]
+
+#define lizzie_u_frame_1 &lizzie_spr_tiles[9*64]
+#define lizzie_u_frame_2 &lizzie_spr_tiles[10*64]
+#define lizzie_u_frame_3 &lizzie_spr_tiles[11*64]
+#define lizzie_p &lizzie_spr_palettes[currlvl.player_palette*4]
+
+// UI.
+#define textvel1 1
+#define textvel2 2
+#define textvel3 4
+
+#define heart_t &Heart_tiles[0]
+#define heart_p &Heart_palettes[0]
+
+// Music and sound.
 // Right & Left = 7
 #define vol_7 0b11101110
 
@@ -29,18 +67,6 @@
 
 // Right & Left = 0
 #define vol_0 0b00000000
-
-#define textvel1 1
-#define textvel2 2
-#define textvel3 4
-
-#define DIR_RIGHT 1
-#define DIR_LEFT -1
-#define DIR_DOWN 2
-#define DIR_UP -2
-#define DIR_NULL 0
-
-#define Map_base 0x34
 
 extern joypads_t jpads;
 extern bool showingDialog;
@@ -67,6 +93,14 @@ typedef struct player_t
 }player_t;
 
 extern player_t player;
+
+typedef struct camera_t
+{
+    uint16_t x;
+    uint16_t y;
+}camera_t;
+
+extern camera_t camera;
 
 typedef struct level_t
 {
