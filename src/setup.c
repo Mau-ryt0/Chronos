@@ -21,7 +21,7 @@
 #include "UI/Font.h"
 #include "UI/Dialog.h"
 
-#include "inc/hUGEDriver.h"
+#include "Ost/hUGEDriver.h"
 
 // Defined in structs.h
 // #define Map_base 0x24
@@ -30,12 +30,13 @@
 
 void setupBkg(void)
 {
+    BGP_REG=0b11111111;
     // Set the Background, map and camera position.
-    SCX_REG = camera.x = (currlvl.x*20), SCY_REG = camera.y = (currlvl.y*18);
+    SCX_REG = camera.x = (currlvl.x*20)<<3, SCY_REG = camera.y = (currlvl.y*18)<<3;
 
     // Set the map.
     set_bkg_data(Map_base, currlvl.tile_count, currlvl.tile_data);
-    set_attributed_bkg_submap(camera.x, camera.y, 20, 18, currlvl.map, currlvl.attr, currlvl.width, Map_base);
+    set_attributed_bkg_submap((camera.x)>>3, (camera.y)>>3, 20, 18, currlvl.map, currlvl.attr, currlvl.width, Map_base);
 
     SHOW_BKG;
 }
@@ -99,7 +100,7 @@ void setupMusic(void)
 {
     // Set interrupts.
     CRITICAL \
-        add_VBL(&VBL_isr);
+        add_VBL(&hUGEisr);
     set_interrupts(IE_REG | VBL_IFLAG);
 
     // Play the current level song.
@@ -109,36 +110,38 @@ void setupMusic(void)
 void setup(void)
 {
     setupBkg();
+    setupMusic();
     setupSprites();
     setupUI();
-    setupMusic();
 
     /* WARNING! */
     // The next line SHOULDN'T be before the setupMusic(); call or the game will crash.
-    (_cpu == CGB_TYPE)?set_bkg_palette(0, 2, currlvl.palettes):fadein();
+    (_cpu == CGB_TYPE)?cfadein(currlvl.palette_dark, currlvl.palettes):fadein();
 }
 
 void changelvl(void)
 {
-    currlvl = levels[load_lvl];
     // Fade and hide background.
-    if (_cpu != CGB_TYPE) fadeout();
+    (_cpu == CGB_TYPE)?cfadeout(currlvl.palettes, currlvl.palette_dark):fadeout();
     HIDE_BKG;
 
     // Shut down music.
     NR51_REG = NR52_REG = 0x00;
 
     CRITICAL \
-        remove_VBL(&VBL_isr);
+        remove_VBL(&hUGEisr);
     set_interrupts(IE_REG & ~VBL_IFLAG);
 
     // Setup new level.
+    currlvl = levels[load_lvl];
+
     setupBkg();
+    setupSprites();
     setupMusic();
 
     /* WARNING! */
     // The next line SHOULDN'T be before the setupMusic(); call or the game will crash.
-    (_cpu == CGB_TYPE)?set_bkg_palette(0, 2, currlvl.palettes):fadein();
+    (_cpu == CGB_TYPE)?cfadein(currlvl.palette_dark, currlvl.palettes):fadein();
 }
 
 void mainloop(void)
@@ -146,7 +149,7 @@ void mainloop(void)
     while(true)
 	{
 		(player.x > 166 || player.x < -6 || player.y > 144 || player.y == 0)?
-            camera_proc(currlvl.width, Map_base):
+            camera_proc(Map_base):
             inputs(&player.x, &player.y, &player.dir);
 
 		(load_lvl != currlvl.lvl_num)?changelvl():vsync();

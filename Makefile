@@ -38,7 +38,7 @@ bgb: clean assets build bgbx
 emuli: clean assets build emulix
 
 assets:
-	$(P2A) Assets/lizzie_spr.png -c src/Sprites/lizzie_spr.c -spr8x16 -sw 16 -sh 16 -noflip -keep_duplicate_tiles -tiles_only
+	$(P2A) Assets/lizzie_spr.png -c src/Sprites/lizzie_spr.c -spr8x16 -noflip -keep_duplicate_tiles -tiles_only
 	$(P2A) Assets/Glitters.png -c src/Sprites/Glitters.c -spr8x8 -tiles_only
 
 	$(P2A) Assets/TestMap.png -c src/Maps/TestMap.c -map -source_tileset Assets/MapTiles.png -noflip -use_map_attributes
@@ -53,7 +53,7 @@ assets:
 	clear
 
 build:
-	$(LCC) -Wl-lsrc/inc/hUGEDriver.lib -Wm-yn"$(PROVTITLE)" -Wm-yc -Wm-ys -o $(PROVTITLE).gbc $(MAINSOURCE) $(TILESOURCE) $(MAPSOURCE) $(UISOURCE) $(OSTSOURCE)
+	$(LCC) -Wl-lsrc/inc/hUGEDriver.lib -Wm-yn"$(PROVTITLE)" -Wm-yc -Wm-ys -Wl-yt0x1B -Wl-j -Wm-ya4 -autobank -Wb-ext=.rel -Wb-v -o $(PROVTITLE).gbc $(MAINSOURCE) $(TILESOURCE) $(MAPSOURCE) $(UISOURCE) $(OSTSOURCE)
 # 	$(LCC) -Wa-l -Wm-yc -Wm-ys -Wl-m -Wl-j -o logic.o $(MAINSOURCE)
 # 	$(LCC) -Wa-l -Wm-yc -Wm-ys -Wl-m -Wl-j -o graphics.o $(TILESOURCE) $(MAPSOURCE)
 # 	$(LCC) -Wa-l -Wm-yc -Wm-ys -Wl-m -Wl-j -o sound.o $(OSTSOURCE)

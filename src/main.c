@@ -24,7 +24,7 @@ const palette_color_t bp[] =
 
 // Function and assembly code by Valentina "Coffe Bat".
 // https://twitter.com/Cofebbat
-bool shouldBlock(void)
+bool shouldBlock(void) NONBANKED
 {
 	__asm
 	ld de, #0xFFFF
@@ -43,7 +43,7 @@ void main(void)
 {
 	if (shouldBlock())
 	{
-		if (_cpu == CGB_TYPE) set_bkg_palette(0, 1, &bp[0]);
+		if (_cpu == CGB_TYPE) set_default_palette();
 
 		font_t font;
 		font_init();

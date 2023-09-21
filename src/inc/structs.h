@@ -7,7 +7,7 @@
 #include "../Sprites/lizzie_spr.h"
 #include "../UI/Heart.h"
 
-#include "hUGEDriver.h"
+#include "../Ost/hUGEDriver.h"
 
 #define DIR_RIGHT 1
 #define DIR_LEFT -1
@@ -115,12 +115,14 @@ typedef struct level_t
     const uint8_t tile_count;
 
     const unsigned char * map;
+    const uint8_t map_bank;
     const unsigned char * attr;
 
     const uint8_t *solids;
     const uint8_t *objects;
 
     const palette_color_t *palettes;
+    palette_color_t *palette_dark;
     const uint8_t palettes_count;
 
     const uint8_t player_palette;

@@ -1,4 +1,4 @@
-#include "../inc/hUGEDriver.h"
+#include "hUGEDriver.h"
 #include <stddef.h>
 
 static const unsigned char order_cnt = 20;
@@ -588,7 +588,7 @@ static const unsigned char P8[] = {
     DN(___,0,0x000),
     DN(___,0,0x000),
     DN(___,0,0x000),
-    DN(Cs6,6,0xC75),
+    DN(D_5,6,0xC75),
     DN(___,0,0x000),
     DN(___,0,0x000),
     DN(___,0,0x000),
@@ -770,15 +770,6 @@ static const unsigned char P11[] = {
     DN(___,0,0x000),
     DN(___,0,0x000),
     DN(___,0,0x000),
-    DN(Cs6,4,0xC75),
-    DN(___,0,0x000),
-    DN(___,0,0x000),
-    DN(___,0,0x000),
-    DN(D_6,4,0xC75),
-    DN(___,0,0x000),
-    DN(___,0,0x000),
-    DN(___,0,0x000),
-    DN(A_5,4,0xC75),
     DN(___,0,0x000),
     DN(___,0,0x000),
     DN(___,0,0x000),
@@ -786,7 +777,16 @@ static const unsigned char P11[] = {
     DN(___,0,0x000),
     DN(___,0,0x000),
     DN(___,0,0x000),
-    DN(E_5,4,0xC75),
+    DN(___,0,0x000),
+    DN(Cs5,2,0xC75),
+    DN(___,0,0x000),
+    DN(___,0,0x000),
+    DN(___,0,0x000),
+    DN(___,0,0x000),
+    DN(___,0,0x000),
+    DN(___,0,0x000),
+    DN(___,0,0x000),
+    DN(___,0,0x000),
     DN(___,0,0x000),
     DN(___,0,0x000),
     DN(___,0,0x000),

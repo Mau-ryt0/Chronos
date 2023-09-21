@@ -9,8 +9,8 @@
 #define lizzie_spr_TILE_ORIGIN 0
 #define lizzie_spr_TILE_W 8
 #define lizzie_spr_TILE_H 16
-#define lizzie_spr_WIDTH 16
-#define lizzie_spr_HEIGHT 16
+#define lizzie_spr_WIDTH 48
+#define lizzie_spr_HEIGHT 64
 #define lizzie_spr_TILE_COUNT 48
 #define lizzie_spr_PALETTE_COUNT 2
 #define lizzie_spr_COLORS_PER_PALETTE 4

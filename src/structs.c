@@ -22,6 +22,7 @@ const unsigned char symbols[25] =
 
 palette_color_t BGPalette[4] = {RGB(29, 25, 21), RGB(17, 15, 11), RGB(13, 11, 7), RGB(3, 3, 3)};
 palette_color_t BGPaletteDark[4] = {RGB8(73, 60, 41), RGB8(73, 60, 41), RGB8(57, 44, 26), RGB8(12, 12, 12)};
+palette_color_t BGPaletteDark2[4] = {RGB(0, 0, 0), RGB(0, 0, 0), RGB8(0, 0, 0), RGB8(0, 0, 0)};
 
 const uint8_t Lvl_0_solids[] =
 {
@@ -51,8 +52,8 @@ const level_t levels[] =
 {
 	{
 		.lvl_num = 0,
-		.x = 0,
-		.y = 0,
+		.x = 2,
+		.y = 1,
 		.width = TestMap_WIDTH,
 		.height = TestMap_HEIGHT,
 		.tile_data = MapTiles_tiles,
@@ -62,6 +63,7 @@ const level_t levels[] =
 		.solids = Lvl_0_solids,
 		.objects = Lvl_0_objects,
 		.palettes = BGPalette,
+        .palette_dark = BGPaletteDark2,
 		.palettes_count = sizeof(BGPalette),
 		.player_palette = 0,
 		.song = &Menuet,
@@ -77,6 +79,7 @@ const level_t levels[] =
 		.map = WaterSpring_map,
 		.attr = WaterSpring_map_attributes,
 		.palettes = WaterSpring_palettes,
+        .palette_dark = BGPaletteDark2,
 		.palettes_count = WaterSpring_PALETTE_COUNT,
 		.player_palette = 1,
 		.song = &Spring,

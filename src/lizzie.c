@@ -157,7 +157,9 @@ void inputs(int16_t *x, int16_t *y, int8_t *_dir)
 	if (jpads.joy0 & J_B && !pressingB)
 	{
 		pressingB = true;
+		ENABLE_RAM_MBC1;
 		load_lvl = (load_lvl == 0 && !showingDialog)?1:0;
+		DISABLE_RAM_MBC1;
 		// if (player.hearts != 0 && !showingDialog) player.hearts--;
 	}
 	else if (pressingB == true && !(jpads.joy0 & J_B)) pressingB = false;

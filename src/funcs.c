@@ -14,7 +14,7 @@
 #include "inc/setup.h"
 #include "inc/gfx.h"
 
-#include "inc/hUGEDriver.h"
+#include "Ost/hUGEDriver.h"
 
 #define appearvel 4
 
@@ -24,11 +24,11 @@ const unsigned char text[] = "abc the text test no. 1";
 const unsigned char funfact[] = "if you didn't know, you can talk to me if you press the a button, but you already know. the text test no. 2";
 const unsigned char abc[] = "abcdefghijklmnopqrstvwxyz";
 
-void VBL_isr(void) {hUGE_dosound();}
+void hUGEisr(void) {hUGE_dosound();}
 
 void play(const hUGESong_t *Song)
 {
-	NR52_REG = 0x80; NR51_REG = 0xFF; NR50_REG = vol_7;
+	NR52_REG = 0x80; NR51_REG = 0xFF; NR50_REG = vol_0;
 
 	__critical {hUGE_init(Song);}
 }
@@ -43,6 +43,8 @@ void scroll_sprites(uint8_t sprites, int8_t _dir, uint8_t vel)
 		else if (_dir == DIR_UP) scroll_sprite(i, 0, -vel);
 	}
 }
+
+/* Collision stuff. */
 
 // Function thanks to Larold's Jubilant Junkyard.
 // https://github.com/LaroldsJubilantJunkyard/gbdk-tilemap-collision
@@ -82,6 +84,7 @@ bool canInteract(uint8_t x, uint8_t y, const unsigned char *map)
 	return false;
 }
 
+// Print system.
 void win_print(unsigned char *text, uint8_t size)
 {
 	uint8_t xpos=0, ypos=0;
@@ -113,6 +116,7 @@ void win_print(unsigned char *text, uint8_t size)
 	}
 }
 
+// Shows the dialogs.
 void show_dialog(uint8_t x, uint8_t y)
 {
 	if (canInteract((x-7)>>3, (y-1*4)>>3, currlvl.map))

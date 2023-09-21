@@ -11,10 +11,10 @@
 #define WaterSpring_TILE_H 8
 #define WaterSpring_WIDTH 160
 #define WaterSpring_HEIGHT 144
-#define WaterSpring_TILE_COUNT 20
-#define WaterSpring_PALETTE_COUNT 1
+#define WaterSpring_TILE_COUNT 22
+#define WaterSpring_PALETTE_COUNT 2
 #define WaterSpring_COLORS_PER_PALETTE 4
-#define WaterSpring_TOTAL_COLORS 4
+#define WaterSpring_TOTAL_COLORS 8
 #define WaterSpring_MAP_ATTRIBUTES WaterSpring_map_attributes
 #define WaterSpring_MAP_ATTRIBUTES_WIDTH 20
 #define WaterSpring_MAP_ATTRIBUTES_HEIGHT 18
@@ -23,8 +23,8 @@
 
 BANKREF_EXTERN(WaterSpring)
 
-extern const palette_color_t WaterSpring_palettes[4];
-extern const uint8_t WaterSpring_tiles[320];
+extern const palette_color_t WaterSpring_palettes[8];
+extern const uint8_t WaterSpring_tiles[352];
 
 extern const unsigned char WaterSpring_map[360];
 extern const unsigned char WaterSpring_map_attributes[360];
