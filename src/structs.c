@@ -9,9 +9,6 @@
 
 #include "Ost/Ost.h"
 
-#define lvl_0 0
-#define lvl_1 1
-
 uint8_t load_lvl = lvl_0;
 
 const unsigned char symbols[25] =
@@ -35,55 +32,55 @@ const uint8_t Lvl_0_solids[] =
 
 const uint8_t Lvl_0_objects[] = {0x18, 0x19};
 
-// Set the player data.
 player_t player =
 {
-	.x = 80,
-	.y = 72,
-	.width = 14, .height = 16,
-	.canAnimate = true,
-	.hearts = 3,
-	.old_hearts = 3,
-	.dir = DIR_RIGHT
+    .x = 80,
+    .y = 72,
+    .width = 14, .height = 16,
+    .canAnimate = true,
+    .hearts = 3,
+    .old_hearts = 3,
+    .dir = DIR_RIGHT
 };
 
 // This set the levels data.
 const level_t levels[] =
 {
-	{
-		.lvl_num = 0,
-		.x = 2,
-		.y = 1,
-		.width = TestMap_WIDTH,
-		.height = TestMap_HEIGHT,
-		.tile_data = MapTiles_tiles,
-		.tile_count = MapTiles_TILE_COUNT,
-		.map = TestMap_map,
-		.attr = TestMap_map_attributes,
-		.solids = Lvl_0_solids,
-		.objects = Lvl_0_objects,
-		.palettes = BGPalette,
+    {
+        .lvl_num = 0,
+        .x = 2,
+        .y = 1,
+        .width = TestMap_WIDTH,
+        .height = TestMap_HEIGHT,
+        .tiles_bank = BANK(MapTiles),
+        .tiles_data = MapTiles_tiles,
+        .tiles_count = MapTiles_TILE_COUNT,
+        .map = TestMap_map,
+        .attr = TestMap_map_attributes,
+        .solids = Lvl_0_solids,
+        .objects = Lvl_0_objects,
+        .palettes = BGPalette,
         .palette_dark = BGPaletteDark2,
-		.palettes_count = sizeof(BGPalette),
-		.player_palette = 0,
-		.song = &Menuet,
-	},
-	{
-		.lvl_num = 1,
-		.x = 0,
-		.y = 0,
-		.width = WaterSpring_WIDTH,
-		.height = WaterSpring_HEIGHT,
-		.tile_data = WaterSpring_tiles,
-		.tile_count = WaterSpring_TILE_COUNT,
-		.map = WaterSpring_map,
-		.attr = WaterSpring_map_attributes,
-		.palettes = WaterSpring_palettes,
+        .palettes_count = sizeof(BGPalette),
+        .player_palette = 0,
+        .song = &Menuet
+    },
+    {
+        .lvl_num = 1,
+        .x = 0,
+        .y = 0,
+        .width = WaterSpring_WIDTH,
+        .height = WaterSpring_HEIGHT,
+        .tiles_data = WaterSpring_tiles,
+        .tiles_count = WaterSpring_TILE_COUNT,
+        .map = WaterSpring_map,
+        .attr = WaterSpring_map_attributes,
+        .palettes = WaterSpring_palettes,
         .palette_dark = BGPaletteDark2,
-		.palettes_count = WaterSpring_PALETTE_COUNT,
-		.player_palette = 1,
-		.song = &Spring,
-	}
+        .palettes_count = WaterSpring_PALETTE_COUNT,
+        .player_palette = 1,
+        .song = &Spring
+    }
 };
 
 level_t currlvl;

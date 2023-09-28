@@ -28,20 +28,20 @@
 
 // const int8_t waterfx[] = {1, 1, 1, 1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1};
 
-void setupBkg(void)
+void setupBkg(void) NONBANKED
 {
     BGP_REG=0b11111111;
     // Set the Background, map and camera position.
     SCX_REG = camera.x = (currlvl.x*20)<<3, SCY_REG = camera.y = (currlvl.y*18)<<3;
 
     // Set the map.
-    set_bkg_data(Map_base, currlvl.tile_count, currlvl.tile_data);
+    set_banked_bkg_data(Map_base, currlvl.tiles_count, currlvl.tiles_data, currlvl.tiles_bank);
     set_attributed_bkg_submap((camera.x)>>3, (camera.y)>>3, 20, 18, currlvl.map, currlvl.attr, currlvl.width, Map_base);
 
     SHOW_BKG;
 }
 
-void setupSprites(void)
+void setupSprites(void) NONBANKED
 {
     // Loads Character's Sprites and palette.
     set_sprite_data(0, 4, lizzie_r_frame_1);
@@ -59,7 +59,7 @@ void setupSprites(void)
     SHOW_SPRITES;
 }
 
-void setupUI(void)
+void setupUI(void) NONBANKED
 {
     // Loads Heart's Sprites and palette.
     set_sprite_data(0x7D, 1, heart_t);
@@ -87,16 +87,18 @@ void setupUI(void)
     set_bkg_data(0x00, sizeof(Font_tiles)>>4, Font_tiles);
 
     // Set the base tile of the dialog.
-    const uint8_t Dialog_base = (currlvl.tile_count)+Map_base;
+    const uint8_t Dialog_base = (currlvl.tiles_count)+Map_base;
 
-    // Set the dialog tiles and map.
+    // Set the dialog tile data and tilemap.
+    // FAR_PTR *tiles_fptr = to_far_ptr(DialogTiles_tiles, BANK(DialogTiles));
+
     set_bkg_data(Dialog_base, sizeof(DialogTiles_tiles)>>4, DialogTiles_tiles);
     set_win_based_tiles(0, 0, 20, 6, Dialog_map, Dialog_base);
 
     SHOW_WIN;
 }
 
-void setupMusic(void)
+void setupMusic(void) NONBANKED
 {
     // Set interrupts.
     CRITICAL \
@@ -107,7 +109,7 @@ void setupMusic(void)
     play(currlvl.song);
 }
 
-void setup(void)
+void setup(void) NONBANKED
 {
     setupBkg();
     setupMusic();
@@ -119,7 +121,7 @@ void setup(void)
     (_cpu == CGB_TYPE)?cfadein(currlvl.palette_dark, currlvl.palettes):fadein();
 }
 
-void changelvl(void)
+void changelvl(void) NONBANKED
 {
     // Fade and hide background.
     (_cpu == CGB_TYPE)?cfadeout(currlvl.palettes, currlvl.palette_dark):fadeout();
@@ -144,7 +146,7 @@ void changelvl(void)
     (_cpu == CGB_TYPE)?cfadein(currlvl.palette_dark, currlvl.palettes):fadein();
 }
 
-void mainloop(void)
+void mainloop(void) NONBANKED
 {
     while(true)
 	{

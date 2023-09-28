@@ -10,6 +10,13 @@
 
 #include "inc/structs.h"
 
+#include "Tiles/MapTiles.h"
+#include "Maps/TestMap.h"
+
+#include "Maps/WaterSpring.h"
+
+#include "Ost/Ost.h"
+
 /*void trans_LCD()
 {
 }*/
@@ -39,7 +46,7 @@ bool shouldBlock(void) NONBANKED
 	return 0;
 }
 
-void main(void)
+void main(void) NONBANKED
 {
 	if (shouldBlock())
 	{
@@ -59,6 +66,7 @@ void main(void)
 	{
 		if (_cpu == CGB_TYPE) cpu_fast();
         joypad_init(1, &jpads);
+        // initStructs();// Set the player data.
         currlvl = levels[load_lvl];
 		setup();
 		mainloop();

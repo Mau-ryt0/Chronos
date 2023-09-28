@@ -2,12 +2,24 @@
 
 #include <gb/gb.h>
 #include <gb/cgb.h>
+#include <gbdk/far_ptr.h>
 #include <stdbool.h>
 
 #include "../Sprites/lizzie_spr.h"
 #include "../UI/Heart.h"
 
 #include "../Ost/hUGEDriver.h"
+
+#define lvl_0 0
+#define lvl_1 1
+
+extern void initStructs(void);
+
+extern palette_color_t BGPalette[4];
+extern palette_color_t BGPaletteDark2[4];
+
+extern const uint8_t Lvl_0_solids[];
+extern const uint8_t Lvl_0_objects[];
 
 #define DIR_RIGHT 1
 #define DIR_LEFT -1
@@ -81,9 +93,13 @@ extern const uint8_t objectTiles[];
 
 extern uint8_t load_lvl;
 
+typedef struct fptr_t {
+    UBYTE bank;
+    void * ptr;
+} fptr_t;
+
 typedef struct player_t
 {
-	// UBYTE sprites[4];
 	int16_t x, y;
 	uint8_t width, height;
 	uint8_t hearts, old_hearts;
@@ -111,8 +127,9 @@ typedef struct level_t
     const uint16_t width;
     const uint16_t height;
 
-    const uint8_t *tile_data;
-    const uint8_t tile_count;
+    const uint8_t tiles_bank;
+    const uint8_t *tiles_data;
+    const uint8_t tiles_count;
 
     const unsigned char * map;
     const uint8_t map_bank;

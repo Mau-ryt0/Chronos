@@ -3,16 +3,11 @@
 #ifndef _SETUP_H_INCLUDE
 #define _SETUP_H_INCLUDE
 
-extern void setupBkg(void);
-// BANKREF_EXTERN(setupBkg)
-extern void setupSprites(void);
-// BANKREF_EXTERN(setupSprites)
-extern void setupUI(void);
-// BANKREF_EXTERN(setupUI)
-extern void setupMusic(void);
-// BANKREF_EXTERN(setupMusic)
-extern void setup(void);
-// BANKREF_EXTERN(setup)
-extern void mainloop(void);
+extern void setupBkg(void) NONBANKED;
+extern void setupSprites(void) NONBANKED;
+extern void setupUI(void) NONBANKED;
+extern void setupMusic(void) NONBANKED;
+extern void setup(void) NONBANKED;
+extern void mainloop(void) NONBANKED;
 
 #endif

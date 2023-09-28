@@ -29,7 +29,7 @@ bool pressingA = false;
 bool pressingB = false;
 bool isColliding = false;
 
-void walking(void)
+void walking(void) NONBANKED
 {
 	timer = (player.old_dir != player.dir)?0:timer;
 	player.old_dir = player.dir;
@@ -85,7 +85,7 @@ void walking(void)
 			(timer > 24)?0:timer+1;
 }
 
-void inputs(int16_t *x, int16_t *y, int8_t *_dir)
+void inputs(int16_t *x, int16_t *y, int8_t *_dir) NONBANKED
 {
     joypad_ex(&jpads);
 

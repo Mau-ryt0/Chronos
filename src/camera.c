@@ -25,7 +25,7 @@ camera_t camera;
 // For that you should get the tile position in the tilemap, by dividing the Game Boy's background position by 8.
 // It will give you a position in tiles, something that the Game Boy can understand.
 // This method should use set_bkg_based_submap(), because the first two parameters are used for both tile map position and Game Boy's Background position.
-void camera_proc(const uint8_t base)
+void camera_proc(const uint8_t base) NONBANKED
 {
 	// Right scroll.
 	if (player.x > 166)

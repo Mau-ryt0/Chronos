@@ -1,7 +1,9 @@
 // gfx.c
 
 #include <gb/gb.h>
+// #if CGB_TYPE
 #include <gb/cgb.h>
+// #endif
 #include <stdio.h>
 
 #include "inc/structs.h"
@@ -10,7 +12,7 @@
 
 #define fadeDelay 2
 
-void cfadeout(palette_color_t *from, palette_color_t *to)
+void cfadeout(palette_color_t *from, palette_color_t *to) NONBANKED
 {
 	while (from[0] != to[0])
 	{
@@ -35,7 +37,7 @@ void cfadeout(palette_color_t *from, palette_color_t *to)
 	}
 }
 
-void cfadein(palette_color_t *from, palette_color_t *to)
+void cfadein(palette_color_t *from, palette_color_t *to) NONBANKED
 {
 	// palette_color_t *from is the palette that will change.
 	// palette_color_t *to is the palette which *from palette will change to.
@@ -62,7 +64,7 @@ void cfadein(palette_color_t *from, palette_color_t *to)
 	}
 }
 
-void fadeout(void)
+void fadeout(void) NONBANKED
 {
 	for (uint8_t i=0; i<7; i++)
 	{
@@ -82,7 +84,7 @@ void fadeout(void)
 	}
 }
 
-void fadein(void)
+void fadein(void) NONBANKED
 {
 	for (uint8_t i=0; i<7; i++)
 	{

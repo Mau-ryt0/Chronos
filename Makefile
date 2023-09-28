@@ -2,13 +2,19 @@
 LCC = lcc
 P2A = png2asset
 
+# Game title.
+PROVTITLE = Chronos
+# Yes, "Chronos" is actually a provisional title.
+
+# LCC flags here.
+FLAGS = -Wl-lsrc/inc/hUGEDriver.lib -Wm-yn"$(PROVTITLE)" -Wm-yc -Wm-ys -Wl-yt0x1B -Wl-j -Wm-yoA -Wm-ya4 -autobank -Wb-ext=.rel -Wb-v
+
 # Put your emulator PATH.
 SBPATH = sameboy
 BGBPATH = bgb
 EMULIPATH = emulicious
 
-# Yes, "Chronos" is actually a provisional title.
-PROVTITLE = Chronos
+
 
 # Game sources.
 MAINSOURCE := ./src/main.c ./src/funcs.c ./src/lizzie.c ./src/camera.c ./src/gfx.c ./src/setup.c ./src/structs.c
@@ -42,7 +48,7 @@ assets:
 	$(P2A) Assets/Glitters.png -c src/Sprites/Glitters.c -spr8x8 -tiles_only
 
 	$(P2A) Assets/TestMap.png -c src/Maps/TestMap.c -map -source_tileset Assets/MapTiles.png -noflip -use_map_attributes
-	$(P2A) Assets/MapTiles.png -c src/Tiles/MapTiles.c -map -tiles_only -noflip -no_palettes
+	$(P2A) Assets/MapTiles.png -c src/Tiles/MapTiles.c -map -tiles_only -noflip -no_palettes -b 192
 	$(P2A) Assets/WaterSpring.png -c src/Maps/WaterSpring.c -map -noflip -use_map_attributes
 
 	$(P2A) Assets/Font.png -c src/UI/Font.c -map -tiles_only -noflip -no_palettes -keep_duplicated_tiles
@@ -53,7 +59,7 @@ assets:
 	clear
 
 build:
-	$(LCC) -Wl-lsrc/inc/hUGEDriver.lib -Wm-yn"$(PROVTITLE)" -Wm-yc -Wm-ys -Wl-yt0x1B -Wl-j -Wm-ya4 -autobank -Wb-ext=.rel -Wb-v -o $(PROVTITLE).gbc $(MAINSOURCE) $(TILESOURCE) $(MAPSOURCE) $(UISOURCE) $(OSTSOURCE)
+	$(LCC) $(FLAGS) -o $(PROVTITLE).gbc $(MAINSOURCE) $(TILESOURCE) $(MAPSOURCE) $(UISOURCE) $(OSTSOURCE)
 # 	$(LCC) -Wa-l -Wm-yc -Wm-ys -Wl-m -Wl-j -o logic.o $(MAINSOURCE)
 # 	$(LCC) -Wa-l -Wm-yc -Wm-ys -Wl-m -Wl-j -o graphics.o $(TILESOURCE) $(MAPSOURCE)
 # 	$(LCC) -Wa-l -Wm-yc -Wm-ys -Wl-m -Wl-j -o sound.o $(OSTSOURCE)
